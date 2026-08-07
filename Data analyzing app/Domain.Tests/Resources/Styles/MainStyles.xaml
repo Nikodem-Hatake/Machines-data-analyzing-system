@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+>
+    <Style TargetType="Border" Class="TableCellBorder">
+        <Setter Property="Stroke" Value="{AppThemeBinding
+        Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+    </Style>
+    
+    <Style TargetType="Button">
+        <Setter Property="CornerRadius" Value="10"/>
+    </Style>
+    
+    <Style TargetType="Button" Class="MachineDetailsButton">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding 
+        Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+        <Setter Property="Text" Value="See details"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryDarkText}}"/>
+    </Style>
+
+    <Style TargetType="Button" Class="PaginationButton">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding 
+        Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryDarkText}}"/>
+    </Style>
+    
+    <Style TargetType="Button" Class="RefreshButton">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding 
+        Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+        <Setter Property="HorizontalOptions" Value="End"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Text" Value="Refresh"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryDarkText}}"/>
+        <Setter Property="VerticalOptions" Value="End"/>
+    </Style>
+
+    <Style TargetType="CollectionView" Class="MainCollectionView">
+        <Setter Property="Margin" Value="25"/>
+        <Setter Property="SelectionMode" Value="None"/>
+    </Style>
+
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+        Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"/>
+    </Style>
+
+    <Style TargetType="FlexLayout" Class="MachineDetailsFlexLayout">
+        <Setter Property="AlignItems" Value="Start"/>
+        <Setter Property="Direction" Value="Column"/>
+        <Setter Property="JustifyContent" Value="SpaceEvenly"/>
+        <Setter Property="Margin" Value="25, 0, 0, 0"/>
+    </Style>
+
+    <Style TargetType="Grid" Class="MachineMainViewGrid">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="RowDefinitions" Value="*, *"/>
+    </Style>
+
+    <Style TargetType="Label" Class="EmptyCollectionViewLabel">
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="Text" Value="No machines to display."/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource SecondaryText}, Dark={StaticResource SecondaryDarkText}}"/>
+    </Style>
+
+    <Style TargetType="Label" Class="MachineDetailsLabel">
+        <Setter Property="FontSize" Value="Small"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource SecondaryText}, Dark={StaticResource SecondaryDarkText}}"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+    
+    <Style TargetType="Label" Class="MachineNameLabel">
+        <Setter Property="FontSize" Value="Title"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource SecondaryText}, Dark={StaticResource SecondaryDarkText}}"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="Label" Class="TitleLabel">
+        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="Text" Value="Machines"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding
+        Light={StaticResource SecondaryText}, Dark={StaticResource SecondaryDarkText}}"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="RoundRectangle" Class="BackgroundRoundRectangle">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+        Light={StaticResource PrimaryDarkText}, Dark={StaticResource PrimaryText}}"/>
+        <Setter Property="CornerRadius" Value="10"/>
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/Data analyzing app/">
+    <Project Path="Data analyzing app/Domain.Tests/Domain.Tests.csproj" />
+    <Project Path="Data analyzing app/Domain/Domain.csproj">
+      <Deploy Solution="Debug|*" />
+    </Project>
+    <Project Path="Data analyzing app/Tests/Tests.csproj" />
+  </Folder>
+  <Folder Name="/DataBase data saver service/">
+    <Project Path="DataBase data saver service/Domain.Tests/Domain.Tests.csproj" />
+    <Project Path="DataBase data saver service/Domain/Domain.csproj" />
+    <Project Path="DataBase data saver service/Tests/Tests.csproj" />
+  </Folder>
+  <Folder Name="/Machines data collector service/">
+    <Project Path="Machines data collector service/Domain.Tests/Domain.Tests.csproj" />
+    <Project Path="Machines data collector service/Domain/Domain.csproj" />
+    <Project Path="Machines data collector service/Tests/Tests.csproj" />
+  </Folder>
+</Solution>

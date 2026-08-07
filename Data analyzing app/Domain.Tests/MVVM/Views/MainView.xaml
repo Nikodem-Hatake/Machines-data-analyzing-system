@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"    
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Domain.Tests.MVVM.ViewModels"
+    x:Class="Domain.Tests.MVVM.Views.MainView"
+>
+    <Grid RowDefinitions=".1*, .9*">
+        <Label StyleClass="TitleLabel"/>
+        <Button
+            Command="{Binding RefreshCommand}"
+            StyleClass="RefreshButton"
+        />
+
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Machines}"
+            StyleClass="MainCollectionView"
+        >
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    HorizontalItemSpacing="25"
+                    Orientation="Vertical"
+                    Span="2"
+                    VerticalItemSpacing="25"
+                />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
+                        <Grid StyleClass="MachineMainViewGrid">
+                            <Label 
+                                StyleClass="MachineNameLabel"
+                                Text="{Binding Name}"
+                            />
+                            <Button
+                                Command="{Binding Source={RelativeSource AncestorType=local:MainViewModel}, Path=ShowDetailsCommand}"
+                                CommandParameter="{Binding .}"
+                                Grid.Row="1"
+                                StyleClass="MachineDetailsButton"
+                            />
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+            <CollectionView.EmptyView>
+                <Label StyleClass="EmptyCollectionViewLabel"/>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>
