@@ -4,128 +4,121 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Domain.Tests.MVVM.Views.MachineDetailsView"
 >
-    <Grid RowDefinitions=".1*, .2*, .1*, .6*">
-        <Label
-            StyleClass="TitleLabel"
-            Text="{Binding Machine.Name}"
-        />
-        <Button
-            Command="{Binding RefreshCommand}"
-            StyleClass="RefreshButton"
-        />
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label
+                StyleClass="TitleLabel"
+                Text="{Binding Machine.Name}"
+            />
+            <Button
+                Command="{Binding RefreshCommand}"
+                StyleClass="RefreshButton"
+            />
 
-        <Grid 
-            Grid.Row="1"
-            Margin="25"
-        >
-            <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
-            <FlexLayout StyleClass="MachineDetailsFlexLayout">
-                <Label
-                    StyleClass="MachineDetailsLabel"
-                    Text="{Binding MachineDetails.AverageTemperature, 
-                    StringFormat='Average temperature: {0:F2}'}"
+            <Grid 
+                Margin="25"
+            >
+                <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
+                <FlexLayout StyleClass="MachineDetailsFlexLayout">
+                    <Label
+                        StyleClass="MachineDetailsLabel"
+                        Text="{Binding MachineDetails.AverageTemperature, 
+                        StringFormat='Average temperature: {0:F2}'}"
+                    />
+                    <Label
+                        StyleClass="MachineDetailsLabel"
+                        Text="{Binding MachineDetails.AverageTimeProcessingRecources, 
+                        StringFormat='Average time processing resource: {0:F2}'}"
+                    />
+                    <Label
+                        StyleClass="MachineDetailsLabel"
+                        Text="{Binding MachineDetails.LastUpdateDateTime, 
+                        StringFormat='Last update date: {0}'}"
+                    />
+                    <Label
+                        StyleClass="MachineDetailsLabel"
+                        Text="{Binding MachineDetails.TotalResourcesProcessed, 
+                        StringFormat='Total resources processed: {0}'}"
+                    />
+                </FlexLayout>
+            </Grid>
+
+            <FlexLayout JustifyContent="SpaceEvenly">
+                <Button
+                    Command="{Binding PreviousPaginationMachineDetailCommand}"
+                    StyleClass="PaginationButton"
+                    Text="Previous"
                 />
-                <Label
-                    StyleClass="MachineDetailsLabel"
-                    Text="{Binding MachineDetails.AverageTimeProcessingRecources, 
-                    StringFormat='Average time processing resource: {0:F2}'}"
-                />
-                <Label
-                    StyleClass="MachineDetailsLabel"
-                    Text="{Binding MachineDetails.LastUpdateDateTime, 
-                    StringFormat='Last update date: {0}'}"
-                />
-                <Label
-                    StyleClass="MachineDetailsLabel"
-                    Text="{Binding MachineDetails.TotalResourcesProcessed, 
-                    StringFormat='Total resources processed: {0}'}"
+                <Button
+                    Command="{Binding NextPaginationMachineDetailCommand}"
+                    StyleClass="PaginationButton"
+                    Text="Next"
                 />
             </FlexLayout>
-        </Grid>
 
-        <FlexLayout
-            Grid.Row="2"
-            JustifyContent="SpaceEvenly"
-        >
-            <Button
-                Command="{Binding PreviousPaginationMachineDetailCommand}"
-                StyleClass="PaginationButton"
-                Text="Previous"
-            />
-            <Button
-                Command="{Binding NextPaginationMachineDetailCommand}"
-                StyleClass="PaginationButton"
-                Text="Next"
-            />
-        </FlexLayout>
-
-        <CollectionView
-            Grid.Row="3"
-            ItemsSource="{Binding MachineDatas}"
-            StyleClass="MainCollectionView"
-        >
-            <CollectionView.Header>
-                <Grid>
-                    <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
-                    <Grid ColumnDefinitions=".1*, .2*, .2*, .2*, .3*">
-                        <Border StyleClass="TableCellBorder">
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Id"
-                            />
-                        </Border>
-                        <Border 
-                            Grid.Column="1"
-                            StyleClass="TableCellBorder"
-                        >
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Processed resources"
-                            />
-                        </Border>
-                        <Border 
-                            Grid.Column="2"
-                            StyleClass="TableCellBorder"
-                        >
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Seconds to process"
-                            />
-                        </Border>
-                        <Border 
-                            Grid.Column="3"
-                            StyleClass="TableCellBorder"
-                        >
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Temperature"
-                            />
-                        </Border>
-                        <Border 
-                            Grid.Column="4"
-                            StyleClass="TableCellBorder"
-                        >
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Update data"
-                            />
-                        </Border>
+            <CollectionView
+                ItemsSource="{Binding MachineDatas}"
+                StyleClass="MainCollectionView"
+            >
+                <CollectionView.Header>
+                    <Grid>
+                        <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
+                        <Grid ColumnDefinitions="*, *, *, *, *">
+                            <Border StyleClass="TableCellBorder">
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Id"
+                                />
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Processed&#10;resources"
+                                />
+                            </Border>
+                            <Border 
+                                Grid.Column="2"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Seconds to&#10;process"
+                                />
+                            </Border>
+                            <Border 
+                                Grid.Column="3"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Temperature"
+                                />
+                            </Border>
+                            <Border 
+                                Grid.Column="4"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Update data"
+                                />
+                            </Border>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </CollectionView.Header>
-            
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout
-                    Orientation="Vertical"
-                />
-            </CollectionView.ItemsLayout>
+                </CollectionView.Header>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border StyleClass="TableCellBorder">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
                         <Grid>
                             <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
-                            <Grid ColumnDefinitions=".1*, .2*, .2*, .2*, .3*">
+                            <Grid ColumnDefinitions="*, *, *, *, *">
                                 <Border StyleClass="TableCellBorder">
                                     <Label
                                         StyleClass="MachineDetailsLabel"
@@ -170,9 +163,9 @@
                                 </Border>
                             </Grid>
                         </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

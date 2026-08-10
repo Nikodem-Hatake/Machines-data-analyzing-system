@@ -11,6 +11,8 @@ namespace Domain.Tests.MVVM.ViewModels
 
         private DataBaseContext _dataBaseContext;
         private int _howManyMachineDatasToSkip;
+        private bool _isMachineDatasLoaded;
+        private bool _isMachineDetailsLoaded;
         public Machine Machine { get; private set; }
         public List<MachineDatas> MachineDatas { get; private set; }
         public MachineDetails MachineDetails { get; private set; }
@@ -51,6 +53,7 @@ namespace Domain.Tests.MVVM.ViewModels
             }
 
             this.MachineDatas = machineDatas;
+            this._isMachineDatasLoaded = true;
         }
 
         private async Task <MachineDetails> GetMachineDetails()
@@ -84,11 +87,17 @@ namespace Domain.Tests.MVVM.ViewModels
             return new MachineDetails();
         }
 
-        private async void GetMachineDetailsAsync() => this.MachineDetails = await this.GetMachineDetails();
+        private async void GetMachineDetailsAsync()
+        {
+            this.MachineDetails = await this.GetMachineDetails();
+            this._isMachineDetailsLoaded = true;
+        }
 
         public MachineDetailsViewModel(DataBaseContext dataBaseContext, Machine machine)
         {
             this._dataBaseContext = dataBaseContext;
+            this._isMachineDatasLoaded = false;
+            this._isMachineDetailsLoaded = false;
             this.Machine = machine;
             this.MachineDatas = new List<MachineDatas>();
             this.MachineDetails = new MachineDetails();
@@ -97,6 +106,12 @@ namespace Domain.Tests.MVVM.ViewModels
 
             this.RefreshCommand = new Command(() =>
             {
+                if(!this._isMachineDatasLoaded || !this._isMachineDetailsLoaded)
+                {
+                    return;
+                }
+                this._isMachineDatasLoaded = false;
+                this._isMachineDetailsLoaded = false;
                 this._howManyMachineDatasToSkip = 0;
                 this.GetMachineDetailsAsync();
                 this.GetMachineDatasAsync();
@@ -104,6 +119,11 @@ namespace Domain.Tests.MVVM.ViewModels
 
             this.NextPaginationMachineDetailCommand = new Command(() =>
             {
+                if(!this._isMachineDatasLoaded)
+                {
+                    return;
+                }
+                this._isMachineDatasLoaded = false;
                 this._howManyMachineDatasToSkip += MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
                 this.GetMachineDatasAsync();
             });
@@ -114,6 +134,11 @@ namespace Domain.Tests.MVVM.ViewModels
                 {
                     return;
                 }
+                else if(!this._isMachineDatasLoaded)
+                {
+                    return;
+                }
+                this._isMachineDatasLoaded = false;
 
                 this._howManyMachineDatasToSkip -= MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
                 this.GetMachineDatasAsync();

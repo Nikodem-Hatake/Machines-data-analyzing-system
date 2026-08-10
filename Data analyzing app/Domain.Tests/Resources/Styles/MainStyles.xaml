@@ -16,6 +16,7 @@
     <Style TargetType="Button" Class="MachineDetailsButton">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding 
         Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="Text" Value="See details"/>
         <Setter Property="TextColor" Value="{AppThemeBinding
         Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryDarkText}}"/>
@@ -40,7 +41,7 @@
     </Style>
 
     <Style TargetType="CollectionView" Class="MainCollectionView">
-        <Setter Property="Margin" Value="25"/>
+        <Setter Property="Margin" Value="10"/>
         <Setter Property="SelectionMode" Value="None"/>
     </Style>
 
@@ -55,10 +56,11 @@
         <Setter Property="JustifyContent" Value="SpaceEvenly"/>
         <Setter Property="Margin" Value="25, 0, 0, 0"/>
     </Style>
-
-    <Style TargetType="Grid" Class="MachineMainViewGrid">
-        <Setter Property="Margin" Value="10"/>
-        <Setter Property="RowDefinitions" Value="*, *"/>
+    
+    <Style TargetType="FlexLayout" Class="MachineNameFlexLayout">
+        <Setter Property="AlignItems" Value="Center"/>
+        <Setter Property="Direction" Value="Column"/>
+        <Setter Property="JustifyContent" Value="SpaceBetween"/>
     </Style>
 
     <Style TargetType="Label" Class="EmptyCollectionViewLabel">
@@ -81,6 +83,7 @@
     <Style TargetType="Label" Class="MachineNameLabel">
         <Setter Property="FontSize" Value="Title"/>
         <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="TextColor" Value="{AppThemeBinding
         Light={StaticResource SecondaryText}, Dark={StaticResource SecondaryDarkText}}"/>
         <Setter Property="VerticalTextAlignment" Value="Center"/>
