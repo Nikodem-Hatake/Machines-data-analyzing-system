@@ -11,8 +11,7 @@ namespace Domain.Tests
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(this._connectionString, serverOptions => serverOptions.EnableRetryOnFailure
-            (3, TimeSpan.FromMilliseconds(500), null));
+            optionsBuilder.UseSqlServer(this._connectionString);
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
-
-namespace Domain.Tests
+﻿namespace Domain.Tests
 {
     public static class ExceptionHandler
     {

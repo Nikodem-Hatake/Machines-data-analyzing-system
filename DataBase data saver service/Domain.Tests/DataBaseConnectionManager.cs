@@ -7,9 +7,9 @@ namespace Domain.Tests
 {
     public class DataBaseConnectionManager : IDisposable
     {
-        private IChannel _channel;
+        private readonly IChannel _channel;
         public bool IsConstructedCorrectly { get; }
-        private MachinesDatasDBContext? _machinesDatasDBContext;
+        private readonly MachinesDatasDBContext? _machinesDatasDBContext;
 
         public DataBaseConnectionManager(IChannel channel, string connectionString)
         {
@@ -44,7 +44,7 @@ namespace Domain.Tests
             catch(Exception e)
             {
                 ExceptionHandler.LogExceptionToConsole(e);
-                await this._channel.BasicNackAsync(eventArgs.DeliveryTag, false, false);
+                await this._channel.BasicNackAsync(eventArgs.DeliveryTag, false, true);
             }
         }
     }

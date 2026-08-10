@@ -1,7 +1,7 @@
 ﻿using RabbitMQ.Client;
 using System.Text;
 
-namespace Domain.Tests
+namespace Tests
 {
     public class QueueDataAdder : IDisposable
     {
@@ -10,17 +10,7 @@ namespace Domain.Tests
         private readonly IConnection? _connection;
         public bool IsConstructedCorrectly { get; }
 
-        public void AddData(string data)
-        {
-            try
-            {
-                this._channel.BasicPublishAsync("", this._queueName, Encoding.UTF8.GetBytes(data));
-            }
-            catch(Exception e)
-            {
-                ExceptionHandler.LogExceptionToConsole(e);
-            }
-        }
+        public void AddData(string data) => this._channel.BasicPublishAsync("", this._queueName, Encoding.UTF8.GetBytes(data));
 
         public void Dispose()
         {
@@ -42,7 +32,6 @@ namespace Domain.Tests
             }
             catch(Exception e)
             {
-                ExceptionHandler.LogExceptionToConsole(e);
                 this.IsConstructedCorrectly = false;
                 return;
             }

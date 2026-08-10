@@ -1,5 +1,4 @@
 ﻿using Domain.Tests.MachinesDataCollectorSimulation;
-using RabbitMQ.Client;
 
 namespace Domain.Tests
 {
@@ -33,7 +32,7 @@ namespace Domain.Tests
         {
             while(true)
             {
-                this._machineDataCollector.TryUpdatingMachineData();
+                this._machineDataCollector.TryUpdatingMachinesData();
                 foreach(string machineData in this._machineDataCollector.GetMachinesData())
                 {
                     this._queueDataAdder.AddData(machineData);

@@ -1,5 +1,4 @@
-﻿using Domain.Tests.MachinesDataCollectorSimulation.SimulatedMachineExceptions;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Domain.Tests.MachinesDataCollectorSimulation
 {
@@ -33,7 +32,7 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
             };
         }
 
-        public void TryUpdatingMachineData()
+        public void TryUpdatingMachinesData()
         {
             foreach(SimulatedMachine machine in this._machines)
             {

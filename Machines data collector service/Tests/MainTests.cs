@@ -2,7 +2,6 @@
 using Domain.Tests.MachinesDataCollectorSimulation;
 using Domain.Tests.MachinesDataCollectorSimulation.SimulatedMachineExceptions;
 using FluentAssertions;
-using RabbitMQ.Client;
 using System.Diagnostics;
 
 namespace Tests
