@@ -44,6 +44,12 @@
         <Setter Property="Margin" Value="10"/>
         <Setter Property="SelectionMode" Value="None"/>
     </Style>
+    
+    <Style TargetType="CollectionView" Class="DetailsMainCollectionView">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding
+        Light={StaticResource PrimaryDarkText}, Dark={StaticResource PrimaryText}}"/>
+        <Setter Property="SelectionMode" Value="None"/>
+    </Style>
 
     <Style TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding

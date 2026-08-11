@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Domain.Tests.MVVM.Views.MachineDetailsView"
 >
-    <ScrollView>
+    <ScrollView Orientation="Vertical">
         <VerticalStackLayout>
             <Label
                 StyleClass="TitleLabel"
@@ -57,26 +57,80 @@
             </FlexLayout>
 
             <CollectionView
+                x:Name="MainCollectionView"
                 ItemsSource="{Binding MachineDatas}"
-                StyleClass="MainCollectionView"
+                StyleClass="DetailsMainCollectionView"
             >
                 <CollectionView.Header>
-                    <Grid>
-                        <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
+                    <Grid ColumnDefinitions="*, *, *, *, *">
+                        <Border StyleClass="TableCellBorder">
+                            <Label
+                                StyleClass="MachineDetailsLabel"
+                                Text="Id"
+                            />
+                        </Border>
+                        <Border
+                            Grid.Column="1"
+                            StyleClass="TableCellBorder"
+                        >
+                            <Label
+                                StyleClass="MachineDetailsLabel"
+                                Text="Processed&#10;resources"
+                            />
+                        </Border>
+                        <Border 
+                            Grid.Column="2"
+                            StyleClass="TableCellBorder"
+                        >
+                            <Label
+                                StyleClass="MachineDetailsLabel"
+                                Text="Seconds to&#10;process"
+                            />
+                        </Border>
+                        <Border 
+                            Grid.Column="3"
+                            StyleClass="TableCellBorder"
+                        >
+                            <Label
+                                StyleClass="MachineDetailsLabel"
+                                Text="Temperature"
+                            />
+                        </Border>
+                        <Border 
+                            Grid.Column="4"
+                            StyleClass="TableCellBorder"
+                        >
+                            <Label
+                                StyleClass="MachineDetailsLabel"
+                                Text="Update data"
+                            />
+                        </Border>
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout 
+                        Orientation="Vertical"
+                        Span="1"
+                    />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
                         <Grid ColumnDefinitions="*, *, *, *, *">
                             <Border StyleClass="TableCellBorder">
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="Id"
+                                    Text="{Binding Id}"
                                 />
                             </Border>
-                            <Border
+                            <Border 
                                 Grid.Column="1"
                                 StyleClass="TableCellBorder"
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="Processed&#10;resources"
+                                    Text="{Binding NumberOfProcessedResourcesSinceGettingData}"
                                 />
                             </Border>
                             <Border 
@@ -85,7 +139,7 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="Seconds to&#10;process"
+                                    Text="{Binding SecondsInWhichResourcesWasProcessed, StringFormat='{0:F2}'}"
                                 />
                             </Border>
                             <Border 
@@ -94,7 +148,7 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="Temperature"
+                                    Text="{Binding Temperature, StringFormat='{0:F2}'}"
                                 />
                             </Border>
                             <Border 
@@ -103,65 +157,9 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="Update data"
+                                    Text="{Binding UpdateDataDate}"
                                 />
                             </Border>
-                        </Grid>
-                    </Grid>
-                </CollectionView.Header>
-
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"/>
-                </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
-                            <Grid ColumnDefinitions="*, *, *, *, *">
-                                <Border StyleClass="TableCellBorder">
-                                    <Label
-                                        StyleClass="MachineDetailsLabel"
-                                        Text="{Binding Id}"
-                                    />
-                                </Border>
-                                <Border 
-                                    Grid.Column="1"
-                                    StyleClass="TableCellBorder"
-                                >
-                                    <Label
-                                        StyleClass="MachineDetailsLabel"
-                                        Text="{Binding NumberOfProcessedResourcesSinceGettingData}"
-                                    />
-                                </Border>
-                                <Border 
-                                    Grid.Column="2"
-                                    StyleClass="TableCellBorder"
-                                >
-                                    <Label
-                                        StyleClass="MachineDetailsLabel"
-                                        Text="{Binding SecondsInWhichResourcesWasProcessed, StringFormat='{0:F2}'}"
-                                    />
-                                </Border>
-                                <Border 
-                                    Grid.Column="3"
-                                    StyleClass="TableCellBorder"
-                                >
-                                    <Label
-                                        StyleClass="MachineDetailsLabel"
-                                        Text="{Binding Temperature, StringFormat='{0:F2}'}"
-                                    />
-                                </Border>
-                                <Border 
-                                    Grid.Column="4"
-                                    StyleClass="TableCellBorder"
-                                >
-                                    <Label
-                                        StyleClass="MachineDetailsLabel"
-                                        Text="{Binding UpdateDataDate}"
-                                    />
-                                </Border>
-                            </Grid>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

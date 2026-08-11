@@ -16,9 +16,69 @@ namespace Domain.Tests.MVVM.ViewModels
         public Machine Machine { get; private set; }
         public List<MachineDatas> MachineDatas { get; private set; }
         public MachineDetails MachineDetails { get; private set; }
-        public Command NextPaginationMachineDetailCommand { get; }
-        public Command PreviousPaginationMachineDetailCommand { get; }
-        public Command RefreshCommand { get; }
+        public Command NextPaginationMachineDetailCommand { get; private set; }
+        public Command PreviousPaginationMachineDetailCommand { get; private set; }
+        public Command RefreshCommand { get; private set;  }
+
+        public MachineDetailsViewModel(DataBaseContext dataBaseContext, Machine machine)
+        {
+            this._dataBaseContext = dataBaseContext;
+            this._isMachineDatasLoaded = false;
+            this._isMachineDetailsLoaded = false;
+            this.Machine = machine;
+            this.MachineDatas = new List<MachineDatas>();
+            this.MachineDetails = new MachineDetails();
+            this.CreateCommands();
+        }
+
+        private void CreateCommands()
+        {
+            this.RefreshCommand = new Command(() =>
+            {
+                if(!this._isMachineDatasLoaded || !this._isMachineDetailsLoaded)
+                {
+                    return;
+                }
+                this._isMachineDatasLoaded = false;
+                this._isMachineDetailsLoaded = false;
+                this._howManyMachineDatasToSkip = 0;
+                this.GetMachineDetailsAsync();
+                this.GetMachineDatasAsync();
+            });
+
+            this.NextPaginationMachineDetailCommand = new Command(() =>
+            {
+                if(!this._isMachineDatasLoaded)
+                {
+                    return;
+                }
+                this._isMachineDatasLoaded = false;
+                this._howManyMachineDatasToSkip += MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
+                this.GetMachineDatasAsync();
+            });
+
+            this.PreviousPaginationMachineDetailCommand = new Command(() =>
+            {
+                if(this._howManyMachineDatasToSkip == 0)
+                {
+                    return;
+                }
+                else if(!this._isMachineDatasLoaded)
+                {
+                    return;
+                }
+                this._isMachineDatasLoaded = false;
+
+                this._howManyMachineDatasToSkip -= MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
+                this.GetMachineDatasAsync();
+            });
+        }
+
+        public void GetDataOnLoad()
+        {
+            this.GetMachineDetailsAsync();
+            this.GetMachineDatasAsync();
+        }
 
         private async Task<List<MachineDatas>>GetMachineDatas()
         {
@@ -91,58 +151,6 @@ namespace Domain.Tests.MVVM.ViewModels
         {
             this.MachineDetails = await this.GetMachineDetails();
             this._isMachineDetailsLoaded = true;
-        }
-
-        public MachineDetailsViewModel(DataBaseContext dataBaseContext, Machine machine)
-        {
-            this._dataBaseContext = dataBaseContext;
-            this._isMachineDatasLoaded = false;
-            this._isMachineDetailsLoaded = false;
-            this.Machine = machine;
-            this.MachineDatas = new List<MachineDatas>();
-            this.MachineDetails = new MachineDetails();
-            this.GetMachineDetailsAsync();
-            this.GetMachineDatasAsync();
-
-            this.RefreshCommand = new Command(() =>
-            {
-                if(!this._isMachineDatasLoaded || !this._isMachineDetailsLoaded)
-                {
-                    return;
-                }
-                this._isMachineDatasLoaded = false;
-                this._isMachineDetailsLoaded = false;
-                this._howManyMachineDatasToSkip = 0;
-                this.GetMachineDetailsAsync();
-                this.GetMachineDatasAsync();
-            });
-
-            this.NextPaginationMachineDetailCommand = new Command(() =>
-            {
-                if(!this._isMachineDatasLoaded)
-                {
-                    return;
-                }
-                this._isMachineDatasLoaded = false;
-                this._howManyMachineDatasToSkip += MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
-                this.GetMachineDatasAsync();
-            });
-
-            this.PreviousPaginationMachineDetailCommand = new Command(() =>
-            {
-                if(this._howManyMachineDatasToSkip == 0)
-                {
-                    return;
-                }
-                else if(!this._isMachineDatasLoaded)
-                {
-                    return;
-                }
-                this._isMachineDatasLoaded = false;
-
-                this._howManyMachineDatasToSkip -= MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
-                this.GetMachineDatasAsync();
-            });
         }
     }
 }

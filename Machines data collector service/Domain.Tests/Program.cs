@@ -1,43 +1,21 @@
 ﻿using Domain.Tests.MachinesDataCollectorSimulation;
+using System.Configuration;
 
 namespace Domain.Tests
 {
-    public class Program
+    public static class Program
     {
-        private const string HOST_NAME = "rabbitmq";
-        private const string QUEUE_NAME = "MachinesData";
-
-        private IMachineDataCollector _machineDataCollector;
-        private QueueDataAdder _queueDataAdder;
-
         static void Main(string[] args)
         {
-            using(QueueDataAdder queueDataAdder = new QueueDataAdder(HOST_NAME, QUEUE_NAME))
+            using(QueueDataAdder queueDataAdder = new QueueDataAdder
+            (ConfigurationManager.ConnectionStrings["HostName"].ConnectionString,
+            ConfigurationManager.ConnectionStrings["QueueName"].ConnectionString))
             {
                 if(queueDataAdder.IsConstructedCorrectly)
                 {
-                    Program program = new Program(new SimulatedMachinesDataCollector(), queueDataAdder);
-                    program.Run();
+                    App app = new App(new SimulatedMachinesDataCollector(), queueDataAdder);
+                    app.Run();
                 }
-            }
-        }
-
-        public Program(IMachineDataCollector machineDataCollector, QueueDataAdder queueDataAdder)
-        {
-            this._machineDataCollector = machineDataCollector;
-            this._queueDataAdder = queueDataAdder;
-        }
-
-        public void Run()
-        {
-            while(true)
-            {
-                this._machineDataCollector.TryUpdatingMachinesData();
-                foreach(string machineData in this._machineDataCollector.GetMachinesData())
-                {
-                    this._queueDataAdder.AddData(machineData);
-                }
-                Task.Delay(Random.Shared.Next(1500, 2000)).Wait();
             }
         }
     }

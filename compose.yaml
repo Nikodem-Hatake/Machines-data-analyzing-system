@@ -1,0 +1,11 @@
+services:
+  DataBaseDataSaverService:
+    build: "DataBase data saver service/"
+    ports:
+      - "${APP_PORT}:5000"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+
+  redis:
+    image: redis:alpine

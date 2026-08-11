@@ -1,0 +1,23 @@
+services:
+  DataBaseDataSaverService:
+    image: ${DOCKER_REGISTRY-}databasesaverservice
+    build:
+      context: .
+      dockerfile: "DataBase data saver service/Domain.Tests/Dockerfile"
+    networks:
+      - machines_data_analyzing_network
+    stdin_open: true
+    tty: true
+  MachinesDataCollectorService:
+    image: ${DOCKER_REGISTRY-}machinesdatacollectorservice
+    build:
+      context: .
+      dockerfile: "Machines data collector service/Domain.Tests/Dockerfile"
+    networks:
+      - machines_data_analyzing_network
+    stdin_open: true
+    tty: true
+networks:
+  machines_data_analyzing_network:
+    external: true
+    name: machines_data_analyzing_network 

@@ -10,19 +10,6 @@ namespace Domain.Tests
         private readonly AsyncEventingBasicConsumer _consumer;
         public bool IsConstructedCorrectly { get; }
 
-        public void AddMethodToInvokeOnRecevingData
-        (AsyncEventHandler<BasicDeliverEventArgs> method)
-        {
-            this._consumer.ReceivedAsync += method;
-            this.Channel.BasicConsumeAsync(this.Channel.CurrentQueue, false, this._consumer);
-        }
-
-        public void Dispose()
-        {
-            this._connection?.Dispose();
-            this.Channel?.Dispose();
-        }
-
         public QueueDataConsumer(string hostName, string queueName)
         {
             try
@@ -35,13 +22,26 @@ namespace Domain.Tests
                 this.Channel.QueueDeclareAsync(queueName, true, false, false).Wait();
                 this._consumer = new AsyncEventingBasicConsumer(this.Channel);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 ExceptionHandler.LogExceptionToConsole(e);
                 this.IsConstructedCorrectly = false;
                 return;
             }
             this.IsConstructedCorrectly = true;
+        }
+
+        public void AddMethodToInvokeOnRecevingData
+        (AsyncEventHandler<BasicDeliverEventArgs> method)
+        {
+            this._consumer.ReceivedAsync += method;
+            this.Channel.BasicConsumeAsync(this.Channel.CurrentQueue, false, this._consumer);
+        }
+
+        public void Dispose()
+        {
+            this._connection?.Dispose();
+            this.Channel?.Dispose();
         }
     }
 }

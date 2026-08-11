@@ -2,7 +2,6 @@
 using Domain.Tests.MachinesDataCollectorSimulation;
 using Domain.Tests.MachinesDataCollectorSimulation.SimulatedMachineExceptions;
 using FluentAssertions;
-using System.Diagnostics;
 
 namespace Tests
 {
@@ -57,12 +56,7 @@ namespace Tests
             }
             using(QueueDataConsumer queueDataConsumer = new QueueDataConsumer(CORRECT_HOST_NAME, QUEUE_NAME_FOR_TESTS))
             {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                while(stopwatch.Elapsed.TotalSeconds < 0.5)
-                {
-
-                }
+                Thread.Sleep(500);
                 queueDataConsumer.RecievedMessages.Should().Contain(data);
             }
         }

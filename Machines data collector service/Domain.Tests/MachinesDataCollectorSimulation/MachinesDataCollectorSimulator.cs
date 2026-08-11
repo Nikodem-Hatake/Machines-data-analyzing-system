@@ -6,15 +6,6 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
     {
         private List<SimulatedMachine> _machines;
 
-        public IEnumerable<string> GetMachinesData()
-        {
-            for(int i = 0; i < this._machines.Count; ++i)
-            {
-                yield return JsonSerializer.Serialize<SimulatedMachine>(this._machines[i]);
-            }
-            yield break;
-        }
-
         public SimulatedMachinesDataCollector()
         {
             this._machines = new List<SimulatedMachine>()
@@ -32,12 +23,13 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
             };
         }
 
-        public void TryUpdatingMachinesData()
+        public IEnumerable<string> GetMachinesData()
         {
-            foreach(SimulatedMachine machine in this._machines)
+            for(int i = 0; i < this._machines.Count; ++i)
             {
-                this.TryUpdatingMachineData(machine);
+                yield return JsonSerializer.Serialize<SimulatedMachine>(this._machines[i]);
             }
+            yield break;
         }
 
         private void TryUpdatingMachineData(SimulatedMachine machine)
@@ -49,6 +41,14 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
             catch (Exception e)
             {
                 ExceptionHandler.LogExceptionToConsole(e);
+            }
+        }
+
+        public void TryUpdatingMachinesData()
+        {
+            foreach(SimulatedMachine machine in this._machines)
+            {
+                this.TryUpdatingMachineData(machine);
             }
         }
     }

@@ -13,18 +13,6 @@ namespace Domain.Tests.MVVM.ViewModels
         public Command RefreshCommand { get; }
         public Command ShowDetailsCommand { get; }
 
-        public async void GetMachinesAsync()
-        {
-            try
-            {
-                this.Machines = await this._dataBaseContext.Machine.ToListAsync();
-            }
-            catch(Exception e)
-            {
-                ExceptionsHandler.LogExceptionToAlertAsync($"Data base error occured when tried to load Machines: {e.Message}");
-            }
-        }
-
         public MainViewModel(DataBaseContext dataBaseContext)
         {
             this._dataBaseContext = dataBaseContext;
@@ -40,6 +28,18 @@ namespace Domain.Tests.MVVM.ViewModels
                     (new MachineDetailsView(this._dataBaseContext, machine));
                 }
             });
+        }
+
+        public async void GetMachinesAsync()
+        {
+            try
+            {
+                this.Machines = await this._dataBaseContext.Machine.ToListAsync();
+            }
+            catch(Exception e)
+            {
+                ExceptionsHandler.LogExceptionToAlertAsync($"Data base error occured when tried to load Machines: {e.Message}");
+            }
         }
     }
 }

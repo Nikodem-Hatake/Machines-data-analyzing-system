@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Data analyzing app/">
-    <Project Path="Data analyzing app/Domain.Tests/Domain.Tests.csproj" />
+    <Project Path="Data analyzing app/Domain.Tests/Domain.Tests.csproj">
+      <Deploy Solution="Debug|*" />
+    </Project>
     <Project Path="Data analyzing app/Domain/Domain.csproj">
       <Deploy Solution="Debug|*" />
     </Project>
@@ -16,4 +18,7 @@
     <Project Path="Machines data collector service/Domain/Domain.csproj" />
     <Project Path="Machines data collector service/Tests/Tests.csproj" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>
