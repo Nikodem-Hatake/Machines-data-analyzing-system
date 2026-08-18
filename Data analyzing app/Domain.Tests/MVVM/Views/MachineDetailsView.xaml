@@ -5,68 +5,83 @@
     x:Class="Domain.Tests.MVVM.Views.MachineDetailsView"
 >
     <ScrollView Orientation="Vertical">
-        <VerticalStackLayout>
-            <Label
-                StyleClass="TitleLabel"
-                Text="{Binding Machine.Name}"
-            />
-            <Button
-                Command="{Binding RefreshCommand}"
-                StyleClass="RefreshButton"
-            />
-
-            <Grid 
-                Margin="25"
-            >
+        <VerticalStackLayout Spacing="50">
+            <Grid>
                 <RoundRectangle StyleClass="BackgroundRoundRectangle"/>
-                <FlexLayout StyleClass="MachineDetailsFlexLayout">
-                    <Label
-                        StyleClass="MachineDetailsLabel"
-                        Text="{Binding MachineDetails.AverageTemperature, 
-                        StringFormat='Average temperature: {0:F2}'}"
-                    />
-                    <Label
-                        StyleClass="MachineDetailsLabel"
-                        Text="{Binding MachineDetails.AverageTimeProcessingRecources, 
-                        StringFormat='Average time processing resource: {0:F2}'}"
-                    />
-                    <Label
-                        StyleClass="MachineDetailsLabel"
-                        Text="{Binding MachineDetails.LastUpdateDateTime, 
-                        StringFormat='Last update date: {0}'}"
-                    />
-                    <Label
-                        StyleClass="MachineDetailsLabel"
-                        Text="{Binding MachineDetails.TotalResourcesProcessed, 
-                        StringFormat='Total resources processed: {0}'}"
-                    />
-                </FlexLayout>
+                <Label
+                    StyleClass="TitleLabel"
+                    Text="{Binding Machine.Name}"
+                />
             </Grid>
 
-            <FlexLayout JustifyContent="SpaceEvenly">
-                <Button
-                    Command="{Binding PreviousPaginationMachineDetailCommand}"
-                    StyleClass="PaginationButton"
-                    Text="Previous"
+            <Grid 
+                ColumnDefinitions="*, *, *"
+                RowDefinitions="*, *"
+            >
+                <RoundRectangle 
+                    Grid.ColumnSpan="3"
+                    Grid.RowSpan="2"
+                    StyleClass="BackgroundRoundRectangle"
                 />
-                <Button
-                    Command="{Binding NextPaginationMachineDetailCommand}"
-                    StyleClass="PaginationButton"
-                    Text="Next"
+                <Label
+                    StyleClass="MachineDetailsLabel"
+                    Text="Start date:"
                 />
-            </FlexLayout>
+                <DatePicker
+                    Date="{Binding StartDateTime}"
+                    Grid.Column="1"
+                    IsEnabled="{Binding IsAggregatedMachineDatasLoaded}"
+                />
+                <TimePicker
+                    Grid.Column="2"
+                    Time="{Binding Time, Mode=TwoWay}"
+                />
+
+                <Label
+                    Grid.Row="1"
+                    IsEnabled="{Binding IsAggregatedMachineDatasLoaded}"
+                    StyleClass="MachineDetailsLabel"
+                    Text="How many aggregated datas forward?:"
+                />
+                <Picker
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    IsEnabled="{Binding IsAggregatedMachineDatasLoaded}"
+                    SelectedIndex="{Binding HowManyToTakeForwardMinusOne}"
+                >
+                    <Picker.Items>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                        <x:String>4</x:String>
+                        <x:String>5</x:String>
+                        <x:String>6</x:String>
+                        <x:String>7</x:String>
+                        <x:String>8</x:String>
+                        <x:String>9</x:String>
+                        <x:String>10</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Button
+                    Command="{Binding GetAggregatedMachineDatasCommand}"
+                    Grid.Column="2"
+                    Grid.Row="1"
+                    StyleClass="MachineDetailsButton"
+                    Text="See aggregated datas"
+                />
+            </Grid>
 
             <CollectionView
                 x:Name="MainCollectionView"
-                ItemsSource="{Binding MachineDatas}"
+                ItemsSource="{Binding AggregatedMachineDatas}"
                 StyleClass="DetailsMainCollectionView"
             >
                 <CollectionView.Header>
-                    <Grid ColumnDefinitions="*, *, *, *, *">
+                    <Grid ColumnDefinitions=".2*, .2*, .133*, .134*, .133*, .2*">
                         <Border StyleClass="TableCellBorder">
                             <Label
                                 StyleClass="MachineDetailsLabel"
-                                Text="Id"
+                                Text="Start date"
                             />
                         </Border>
                         <Border
@@ -75,34 +90,62 @@
                         >
                             <Label
                                 StyleClass="MachineDetailsLabel"
-                                Text="Processed&#10;resources"
+                                Text="Avg seconds to process resource"
                             />
                         </Border>
-                        <Border 
+                        <Grid
+                            ColumnDefinitions="*, *, *"
                             Grid.Column="2"
-                            StyleClass="TableCellBorder"
+                            Grid.ColumnSpan="3"
+                            RowDefinitions="*, *"
                         >
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Seconds to&#10;process"
-                            />
-                        </Border>
+                            <Border 
+                                Grid.ColumnSpan="3"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineNameLabel"
+                                    Text="Temperature"  
+                                />
+                            </Border>
+                            
+                            <Border 
+                                Grid.Row="1"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Min"
+                                />
+                            </Border>
+                            <Border 
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Max"
+                                />
+                            </Border>
+                            <Border 
+                                Grid.Column="2"
+                                Grid.Row="1"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="Avg"
+                                />
+                            </Border>
+                        </Grid>
                         <Border 
-                            Grid.Column="3"
+                            Grid.Column="5"
                             StyleClass="TableCellBorder"
                         >
                             <Label
                                 StyleClass="MachineDetailsLabel"
-                                Text="Temperature"
-                            />
-                        </Border>
-                        <Border 
-                            Grid.Column="4"
-                            StyleClass="TableCellBorder"
-                        >
-                            <Label
-                                StyleClass="MachineDetailsLabel"
-                                Text="Update data"
+                                Text="Sum of processed resources"
                             />
                         </Border>
                     </Grid>
@@ -117,11 +160,11 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="*, *, *, *, *">
+                        <Grid ColumnDefinitions=".2*, .2*, .133*, .134*, .133*, .2*">
                             <Border StyleClass="TableCellBorder">
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="{Binding Id}"
+                                    Text="{Binding StartDate}"
                                 />
                             </Border>
                             <Border 
@@ -130,7 +173,8 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="{Binding NumberOfProcessedResourcesSinceGettingData}"
+                                    Text="{Binding AverageSecondsInWhichResourceIsProcessed,
+                                    StringFormat='{0:F2}'}"
                                 />
                             </Border>
                             <Border 
@@ -139,7 +183,7 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="{Binding SecondsInWhichResourcesWasProcessed, StringFormat='{0:F2}'}"
+                                    Text="{Binding MinimumTemperature, StringFormat='{0:F2}'}"
                                 />
                             </Border>
                             <Border 
@@ -148,7 +192,7 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="{Binding Temperature, StringFormat='{0:F2}'}"
+                                    Text="{Binding MaximumTemperature, StringFormat='{0:F2}'}"
                                 />
                             </Border>
                             <Border 
@@ -157,7 +201,16 @@
                             >
                                 <Label
                                     StyleClass="MachineDetailsLabel"
-                                    Text="{Binding UpdateDataDate}"
+                                    Text="{Binding AverageTemperature, StringFormat='{0:F2}'}"
+                                />
+                            </Border>
+                            <Border 
+                                Grid.Column="5"
+                                StyleClass="TableCellBorder"
+                            >
+                                <Label
+                                    StyleClass="MachineDetailsLabel"
+                                    Text="{Binding TotalNumberOfProcessedResources}"
                                 />
                             </Border>
                         </Grid>

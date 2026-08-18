@@ -7,6 +7,6 @@ namespace Domain.Tests
     public static class ExceptionsHandler
     {
         public static void LogExceptionToAlertAsync(string message)
-        => Shell.Current.DisplayAlertAsync("Błąd", message, "cancel");
+            => Shell.Current.DisplayAlertAsync("Błąd", message, "cancel");
     }
 }

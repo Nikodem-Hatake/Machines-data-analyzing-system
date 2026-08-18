@@ -7,17 +7,15 @@ namespace Domain.Tests
         static void Main(string[] args)
         {
             using(QueueDataConsumer queueDataConsumer = new QueueDataConsumer
-            (ConfigurationManager.ConnectionStrings["HostName"].ConnectionString,
-            ConfigurationManager.ConnectionStrings["QueueName"].ConnectionString))
-            using(DataBaseConnectionManager dataBaseConnectionManager = new DataBaseConnectionManager
-            (queueDataConsumer.Channel, ConfigurationManager.ConnectionStrings
-            ["DataBaseConnectionString"].ConnectionString))
+                (ConfigurationManager.ConnectionStrings["HostName"].ConnectionString,
+                ConfigurationManager.ConnectionStrings["QueueName"].ConnectionString))
+
+            if(queueDataConsumer.IsConstructedCorrectly )
             {
-                if(dataBaseConnectionManager.IsConstructedCorrectly && queueDataConsumer.IsConstructedCorrectly)
-                {
-                    App app = new App(dataBaseConnectionManager, queueDataConsumer);
-                    app.Run();
-                }
+                App app = new App(new APIConnectionManager(queueDataConsumer.Channel,
+                    ConfigurationManager.ConnectionStrings["APIHostName"].ConnectionString), 
+                    queueDataConsumer);
+                app.Run();
             }
         }
     }

@@ -13,27 +13,28 @@ namespace Domain.Tests
         {
             try
             {
-                this._connection = new ConnectionFactory()
+                _connection = new ConnectionFactory()
                 {
                     HostName = hostName
                 }.CreateConnectionAsync().Result;
-                this._channel = this._connection.CreateChannelAsync().Result;
-                this._channel.QueueDeclareAsync(queueName, true, false, false).Wait();
+                _channel = _connection.CreateChannelAsync().Result;
+                _channel.QueueDeclareAsync(queueName, true, false, false).Wait();
             }
             catch(Exception e)
             {
                 ExceptionHandler.LogExceptionToConsole(e);
-                this.IsConstructedCorrectly = false;
+                IsConstructedCorrectly = false;
                 return;
             }
-            this.IsConstructedCorrectly = true;
+            IsConstructedCorrectly = true;
         }
 
         public void AddData(string data)
         {
             try
             {
-                this._channel.BasicPublishAsync("", this._channel.CurrentQueue, Encoding.UTF8.GetBytes(data));
+                _channel.BasicPublishAsync("", _channel.CurrentQueue, 
+                    Encoding.UTF8.GetBytes(data));
             }
             catch(Exception e)
             {
@@ -43,8 +44,8 @@ namespace Domain.Tests
 
         public void Dispose()
         {
-            this._channel?.Dispose();
-            this._connection?.Dispose();
+            _channel?.Dispose();
+            _connection?.Dispose();
         }
     }
 }

@@ -36,7 +36,9 @@
                                     Text="{Binding Name}"
                                 />
                                 <Button
-                                    Command="{Binding Source={RelativeSource AncestorType=local:MainViewModel}, Path=ShowDetailsCommand}"
+                                    Command="{Binding Source={RelativeSource 
+                                    AncestorType=local:MainViewModel}, 
+                                    Path=ShowDetailsCommand}"
                                     CommandParameter="{Binding .}"
                                     StyleClass="MachineDetailsButton"
                                 />

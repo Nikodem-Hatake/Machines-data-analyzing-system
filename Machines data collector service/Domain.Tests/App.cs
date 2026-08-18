@@ -7,18 +7,18 @@
 
         public App(IMachineDataCollector machineDataCollector, QueueDataAdder queueDataAdder)
         {
-            this._machineDataCollector = machineDataCollector;
-            this._queueDataAdder = queueDataAdder;
+            _machineDataCollector = machineDataCollector;
+            _queueDataAdder = queueDataAdder;
         }
 
         public void Run()
         {
             while(true)
             {
-                this._machineDataCollector.TryUpdatingMachinesData();
-                foreach(string machineData in this._machineDataCollector.GetMachinesData())
+                _machineDataCollector.TryUpdatingMachinesData();
+                foreach(string machineData in _machineDataCollector.GetMachinesData())
                 {
-                    this._queueDataAdder.AddData(machineData);
+                    _queueDataAdder.AddData(machineData);
                 }
                 Task.Delay(Random.Shared.Next(1500, 2000)).Wait();
             }

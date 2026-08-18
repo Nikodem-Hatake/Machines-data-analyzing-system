@@ -12,7 +12,7 @@
     <Style TargetType="Button">
         <Setter Property="CornerRadius" Value="10"/>
     </Style>
-    
+
     <Style TargetType="Button" Class="MachineDetailsButton">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding 
         Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
@@ -22,13 +22,6 @@
         Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryDarkText}}"/>
     </Style>
 
-    <Style TargetType="Button" Class="PaginationButton">
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding 
-        Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
-        <Setter Property="TextColor" Value="{AppThemeBinding
-        Light={StaticResource PrimaryText}, Dark={StaticResource PrimaryDarkText}}"/>
-    </Style>
-    
     <Style TargetType="Button" Class="RefreshButton">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding 
         Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
@@ -56,13 +49,6 @@
         Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"/>
     </Style>
 
-    <Style TargetType="FlexLayout" Class="MachineDetailsFlexLayout">
-        <Setter Property="AlignItems" Value="Start"/>
-        <Setter Property="Direction" Value="Column"/>
-        <Setter Property="JustifyContent" Value="SpaceEvenly"/>
-        <Setter Property="Margin" Value="25, 0, 0, 0"/>
-    </Style>
-    
     <Style TargetType="FlexLayout" Class="MachineNameFlexLayout">
         <Setter Property="AlignItems" Value="Center"/>
         <Setter Property="Direction" Value="Column"/>

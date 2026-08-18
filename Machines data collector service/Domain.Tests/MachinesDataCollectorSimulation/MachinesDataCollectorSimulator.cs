@@ -8,7 +8,7 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
 
         public SimulatedMachinesDataCollector()
         {
-            this._machines = new List<SimulatedMachine>()
+            _machines = new List<SimulatedMachine>()
             {
                 new SimulatedMachine(1, true),
                 new SimulatedMachine(2, true),
@@ -25,9 +25,9 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
 
         public IEnumerable<string> GetMachinesData()
         {
-            for(int i = 0; i < this._machines.Count; ++i)
+            for(int i = 0; i < _machines.Count; ++i)
             {
-                yield return JsonSerializer.Serialize<SimulatedMachine>(this._machines[i]);
+                yield return JsonSerializer.Serialize<SimulatedMachine>(_machines[i]);
             }
             yield break;
         }
@@ -46,9 +46,9 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
 
         public void TryUpdatingMachinesData()
         {
-            foreach(SimulatedMachine machine in this._machines)
+            foreach(SimulatedMachine machine in _machines)
             {
-                this.TryUpdatingMachineData(machine);
+                TryUpdatingMachineData(machine);
             }
         }
     }

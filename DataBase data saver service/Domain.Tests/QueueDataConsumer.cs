@@ -14,34 +14,34 @@ namespace Domain.Tests
         {
             try
             {
-                this._connection = new ConnectionFactory()
+                _connection = new ConnectionFactory()
                 {
                     HostName = hostName
                 }.CreateConnectionAsync().Result;
-                this.Channel = this._connection.CreateChannelAsync().Result;
-                this.Channel.QueueDeclareAsync(queueName, true, false, false).Wait();
-                this._consumer = new AsyncEventingBasicConsumer(this.Channel);
+                Channel = _connection.CreateChannelAsync().Result;
+                Channel.QueueDeclareAsync(queueName, true, false, false).Wait();
+                _consumer = new AsyncEventingBasicConsumer(Channel);
             }
             catch(Exception e)
             {
                 ExceptionHandler.LogExceptionToConsole(e);
-                this.IsConstructedCorrectly = false;
+                IsConstructedCorrectly = false;
                 return;
             }
-            this.IsConstructedCorrectly = true;
+            IsConstructedCorrectly = true;
         }
 
         public void AddMethodToInvokeOnRecevingData
         (AsyncEventHandler<BasicDeliverEventArgs> method)
         {
-            this._consumer.ReceivedAsync += method;
-            this.Channel.BasicConsumeAsync(this.Channel.CurrentQueue, false, this._consumer);
+            _consumer.ReceivedAsync += method;
+            Channel.BasicConsumeAsync(Channel.CurrentQueue, false, _consumer);
         }
 
         public void Dispose()
         {
-            this._connection?.Dispose();
-            this.Channel?.Dispose();
+            _connection?.Dispose();
+            Channel?.Dispose();
         }
     }
 }

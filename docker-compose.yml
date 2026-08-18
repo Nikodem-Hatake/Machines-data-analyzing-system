@@ -8,6 +8,7 @@ services:
       - machines_data_analyzing_network
     stdin_open: true
     tty: true
+
   MachinesDataCollectorService:
     image: ${DOCKER_REGISTRY-}machinesdatacollectorservice
     build:
@@ -17,6 +18,19 @@ services:
       - machines_data_analyzing_network
     stdin_open: true
     tty: true
+
+  MachinesAPI:
+    image: ${DOCKER_REGISTRY-}machinesapi
+    build:
+      context: .
+      dockerfile: "Machines API/Domain.Tests/Dockerfile"
+    networks:
+      - machines_data_analyzing_network
+    ports:
+      - 6969:8080
+    stdin_open: true
+    tty: true
+
 networks:
   machines_data_analyzing_network:
     external: true

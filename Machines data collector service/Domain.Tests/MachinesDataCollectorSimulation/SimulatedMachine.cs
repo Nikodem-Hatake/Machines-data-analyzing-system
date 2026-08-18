@@ -20,18 +20,18 @@ namespace Domain.Tests.MachinesDataCollectorSimulation
                 throw new SimulateMachineException(this, $"Incorrect id of value {id} was passed.",
                 SimulatedMachineExceptionType.incorrectId);
             }
-            this.UpdateDataDate = DateTime.Now.ToString(DATETIME_FORMAT);
-            this.MachineId = id;
-            this.IsRunning = isRunning;
+            UpdateDataDate = DateTime.Now.ToString(DATETIME_FORMAT);
+            MachineId = id;
+            IsRunning = isRunning;
         }
 
         public void SimulateUpdatingData()
         {
-            this.UpdateDataDate = DateTime.Now.ToString(DATETIME_FORMAT);
-            this.NumberOfProcessedResourcesSinceGettingData = Random.Shared.Next(150, 201);
-            this.SecondsInWhichResourcesWasProcessed = Random.Shared.NextSingle() 
-            * (float)this.NumberOfProcessedResourcesSinceGettingData;
-            this.Temperature = (float)Random.Shared.Next(50, 111) + Random.Shared.NextSingle();
+            UpdateDataDate = DateTime.Now.ToString(DATETIME_FORMAT);
+            NumberOfProcessedResourcesSinceGettingData = Random.Shared.Next(150, 201);
+            SecondsInWhichResourcesWasProcessed = Random.Shared.NextSingle() 
+                * (float)NumberOfProcessedResourcesSinceGettingData;
+            Temperature = (float)Random.Shared.Next(50, 111) + Random.Shared.NextSingle();
         }
     }
 }

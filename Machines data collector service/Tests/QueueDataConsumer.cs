@@ -16,36 +16,37 @@ namespace Tests
 
         public void Dispose()
         {
-            this._channel?.Dispose();
-            this._connection?.Dispose();
+            _channel?.Dispose();
+            _connection?.Dispose();
         }
 
         public QueueDataConsumer(string hostName, string queueName)
         {
-            this.RecievedMessages = new List<string>();
+            RecievedMessages = new List<string>();
             try
             {
-                this._connection = new ConnectionFactory()
+                _connection = new ConnectionFactory()
                 {
                     HostName = hostName
                 }.CreateConnectionAsync().Result;
-                this._channel = this._connection.CreateChannelAsync().Result;
-                this._channel.QueueDeclareAsync(queueName, true, false, false);
+                _channel = _connection.CreateChannelAsync().Result;
+                _channel.QueueDeclareAsync(queueName, true, false, false);
 
-                this._consumer = new AsyncEventingBasicConsumer(this._channel);
-                this._consumer.ReceivedAsync += (obj, eventArgs) =>
+                _consumer = new AsyncEventingBasicConsumer(_channel);
+                _consumer.ReceivedAsync += (obj, eventArgs) =>
                 {
-                    this.RecievedMessages.Add(Encoding.UTF8.GetString(eventArgs.Body.ToArray()));
-                    return null;
+                    RecievedMessages.Add(Encoding.UTF8
+                        .GetString(eventArgs.Body.ToArray()));
+                    return Task.CompletedTask;
                 };
-                this._channel.BasicConsumeAsync(queueName, true, this._consumer);
+                _channel.BasicConsumeAsync(queueName, true, _consumer);
             }
             catch(Exception)
             {
-                this.IsConstructedSuccesfully = false;
+                IsConstructedSuccesfully = false;
                 return;
             }
-            this.IsConstructedSuccesfully = true;
+            IsConstructedSuccesfully = true;
         }
     }
 }

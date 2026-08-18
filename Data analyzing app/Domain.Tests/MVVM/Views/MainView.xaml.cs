@@ -6,7 +6,7 @@ public partial class MainView : ContentPage
 {
 	public MainView(MainViewModel mainViewModel)
 	{
-		this.BindingContext = mainViewModel;
+		BindingContext = mainViewModel;
 		InitializeComponent();
 	}
 }

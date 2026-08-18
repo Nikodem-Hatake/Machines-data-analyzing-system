@@ -11,7 +11,7 @@ namespace Domain.Tests
     {
         private static void AddAppSettings(this MauiAppBuilder mauiAppBuilder)
         {
-            using Stream stream = Assembly
+            using Stream? stream = Assembly
                 .GetExecutingAssembly()
                 .GetManifestResourceStream("Domain.Tests.appsettings.json");
 
@@ -37,8 +37,8 @@ namespace Domain.Tests
 
             builder.AddAppSettings();
 
-            builder.Services.AddSingleton<DataBaseContext>
-            (new DataBaseContext(GetConnectionString(builder)));
+            builder.Services.AddSingleton<APIConnectionManager>(new APIConnectionManager
+                (GetAPIHostName(builder) ?? ""));
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<MainView>();
 #if DEBUG
@@ -48,13 +48,13 @@ namespace Domain.Tests
             return builder.Build();
         }
 
-        private static string GetConnectionString(MauiAppBuilder builder)
+        private static string? GetAPIHostName(MauiAppBuilder builder)
         {
             if(Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.Android)
             {
-                return builder.Configuration.GetValue<string>("DataBaseConnectionStringForAndroid");
+                return builder.Configuration.GetValue<string>("APIHostNameForAndroid");
             }
-            return builder.Configuration.GetValue<string>("DataBaseConnectionString");
+            return builder.Configuration.GetValue<string>("APIHostName");
         }
     }
 }

@@ -8,14 +8,13 @@ namespace Domain.Tests
         static void Main(string[] args)
         {
             using(QueueDataAdder queueDataAdder = new QueueDataAdder
-            (ConfigurationManager.ConnectionStrings["HostName"].ConnectionString,
-            ConfigurationManager.ConnectionStrings["QueueName"].ConnectionString))
+                (ConfigurationManager.ConnectionStrings["HostName"].ConnectionString,
+                ConfigurationManager.ConnectionStrings["QueueName"].ConnectionString))
+
+            if(queueDataAdder.IsConstructedCorrectly)
             {
-                if(queueDataAdder.IsConstructedCorrectly)
-                {
-                    App app = new App(new SimulatedMachinesDataCollector(), queueDataAdder);
-                    app.Run();
-                }
+                App app = new App(new SimulatedMachinesDataCollector(), queueDataAdder);
+                app.Run();
             }
         }
     }

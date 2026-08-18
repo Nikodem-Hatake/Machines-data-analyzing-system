@@ -13,6 +13,11 @@
     <Project Path="DataBase data saver service/Domain/Domain.csproj" />
     <Project Path="DataBase data saver service/Tests/Tests.csproj" />
   </Folder>
+  <Folder Name="/Machines API/">
+    <Project Path="Machines API/Domain.Tests/Domain.Tests.csproj" Id="41a38e3d-3238-40be-a7c2-d349543da916" />
+    <Project Path="Machines API/Domain/Domain.csproj" Id="749ddb61-1fc4-4dd2-bf23-e8bbcf2cf3cb" />
+    <Project Path="Machines API/Tests/Tests.csproj" Id="e381d190-aaa3-4759-872e-d96377b8ddbb" />
+  </Folder>
   <Folder Name="/Machines data collector service/">
     <Project Path="Machines data collector service/Domain.Tests/Domain.Tests.csproj" />
     <Project Path="Machines data collector service/Domain/Domain.csproj" />

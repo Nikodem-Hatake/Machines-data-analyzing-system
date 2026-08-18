@@ -2,19 +2,20 @@
 {
     public class App
     {
-        private DataBaseConnectionManager _dataBaseConnectionManager;
+        private APIConnectionManager _APIConnectionManager;
         private QueueDataConsumer _queueDataConsumer;
 
-        public App(DataBaseConnectionManager dataBaseConnectionManager, QueueDataConsumer queueDataConsumer)
+        public App(APIConnectionManager APIConnectionManager, 
+            QueueDataConsumer queueDataConsumer)
         {
-            this._dataBaseConnectionManager = dataBaseConnectionManager;
-            this._queueDataConsumer = queueDataConsumer;
+            _APIConnectionManager = APIConnectionManager;
+            _queueDataConsumer = queueDataConsumer;
         }
 
         public void Run()
         {
-            this._queueDataConsumer.AddMethodToInvokeOnRecevingData
-            (this._dataBaseConnectionManager.OnGettingDataFromQueue);
+            _queueDataConsumer.AddMethodToInvokeOnRecevingData
+                (_APIConnectionManager.OnGettingDataFromQueue);
             Console.Read();
         }
     }

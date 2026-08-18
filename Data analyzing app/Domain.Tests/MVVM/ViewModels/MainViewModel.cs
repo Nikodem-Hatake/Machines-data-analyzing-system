@@ -1,31 +1,31 @@
 ﻿using Domain.Tests.MVVM.Models;
 using Domain.Tests.MVVM.Views;
-using Microsoft.EntityFrameworkCore;
 using PropertyChanged;
+using System.Text.Json;
 
 namespace Domain.Tests.MVVM.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
     public class MainViewModel
     {
-        private DataBaseContext _dataBaseContext;
+        private APIConnectionManager _APIConnectionManager;
         public List <Machine> Machines { get; private set; }
         public Command RefreshCommand { get; }
         public Command ShowDetailsCommand { get; }
 
-        public MainViewModel(DataBaseContext dataBaseContext)
+        public MainViewModel(APIConnectionManager APIConnectionManager)
         {
-            this._dataBaseContext = dataBaseContext;
-            this.Machines = new List<Machine>();
-            this.GetMachinesAsync();
+            _APIConnectionManager = APIConnectionManager;
+            Machines = new List<Machine>();
+            GetMachinesAsync();
 
-            this.RefreshCommand = new Command(this.GetMachinesAsync);
-            this.ShowDetailsCommand = new Command((obj) =>
+            RefreshCommand = new Command(GetMachinesAsync);
+            ShowDetailsCommand = new Command((obj) =>
             {
                 if(obj is Machine machine)
                 {
                     App.Current?.Windows[0].Page?.Navigation.PushAsync
-                    (new MachineDetailsView(this._dataBaseContext, machine));
+                    (new MachineDetailsView(_APIConnectionManager, machine));
                 }
             });
         }
@@ -34,11 +34,18 @@ namespace Domain.Tests.MVVM.ViewModels
         {
             try
             {
-                this.Machines = await this._dataBaseContext.Machine.ToListAsync();
+                List<Machine>? machines = JsonSerializer.Deserialize<List<Machine>> 
+                    (await _APIConnectionManager.Get("/machines"),
+                    new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+                if(machines != null)
+                {
+                    Machines = machines;
+                }
             }
             catch(Exception e)
             {
-                ExceptionsHandler.LogExceptionToAlertAsync($"Data base error occured when tried to load Machines: {e.Message}");
+                ExceptionsHandler.LogExceptionToAlertAsync
+                    ($"Error occured when tried to load Machines: {e.Message}");
             }
         }
     }

@@ -17,7 +17,8 @@ namespace Tests
         [InlineData(-10, true)]
         [InlineData(int.MinValue, true)]
         [InlineData(int.MaxValue, false)]
-        public void SimulatedMachineConstructorThrowsExceptionWhenWrongIdIsPassed(int id, bool shouldThrowException)
+        public void SimulatedMachineConstructorThrowsExceptionWhenWrongIdIsPassed
+            (int id, bool shouldThrowException)
         {
             try
             {
@@ -26,8 +27,9 @@ namespace Tests
             }
             catch (Exception e)
             {
-                e.Should().BeOfType<SimulateMachineException>().Which.SimulatedMachineExceptionType.Should().Be
-                (SimulatedMachineExceptionType.incorrectId);
+                e.Should().BeOfType<SimulateMachineException>().Which
+                    .SimulatedMachineExceptionType.Should().Be
+                    (SimulatedMachineExceptionType.incorrectId);
                 shouldThrowException.Should().BeTrue();
             }
         }
@@ -36,12 +38,12 @@ namespace Tests
         [InlineData(CORRECT_HOST_NAME, true)]
         [InlineData("fakeOnet.pl", false)]
         [InlineData("0.0.0.0", false)]
-        public void QueueDataAdderConstructionExpectsToBePassedBoolValue(string hostName, bool shouldConstructCorrectly)
+        public void QueueDataAdderConstructionExpectsToBePassedBoolValue
+            (string hostName, bool shouldConstructCorrectly)
         {
-            using(QueueDataAdder queueDataAdder = new QueueDataAdder(hostName, QUEUE_NAME_FOR_TESTS))
-            {
-                queueDataAdder.IsConstructedCorrectly.Should().Be(shouldConstructCorrectly);
-            }
+            using(QueueDataAdder queueDataAdder = new QueueDataAdder
+                (hostName, QUEUE_NAME_FOR_TESTS))
+            queueDataAdder.IsConstructedCorrectly.Should().Be(shouldConstructCorrectly);
         }
 
         [Theory]
@@ -50,11 +52,13 @@ namespace Tests
         [InlineData("{}")]
         public void QueueDataAdderAddsDataSuccesfully(string data)
         {
-            using(QueueDataAdder queueDataAdder = new QueueDataAdder(CORRECT_HOST_NAME, QUEUE_NAME_FOR_TESTS))
+            using(QueueDataAdder queueDataAdder = new QueueDataAdder
+                (CORRECT_HOST_NAME, QUEUE_NAME_FOR_TESTS))
             {
                 queueDataAdder.AddData(data);
             }
-            using(QueueDataConsumer queueDataConsumer = new QueueDataConsumer(CORRECT_HOST_NAME, QUEUE_NAME_FOR_TESTS))
+            using(QueueDataConsumer queueDataConsumer = new QueueDataConsumer
+                (CORRECT_HOST_NAME, QUEUE_NAME_FOR_TESTS))
             {
                 Thread.Sleep(500);
                 queueDataConsumer.RecievedMessages.Should().Contain(data);

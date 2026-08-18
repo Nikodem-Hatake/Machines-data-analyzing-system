@@ -1,156 +1,111 @@
 ﻿using Domain.Tests.MVVM.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PropertyChanged;
+using System.Text.Json;
 
 namespace Domain.Tests.MVVM.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
     public class MachineDetailsViewModel
     {
-        private const int MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE = 10;
+        public List<AggregatedMachineDatas> AggregatedMachineDatas { get; set; }
+        private APIConnectionManager _APIConnectionManager;
+        public Command GetAggregatedMachineDatasCommand { get; private set;  }
+        public int HowManyToTakeForwardMinusOne { get; set; }
+        public bool IsAggregatedMachineDatasLoaded { get; set; }
+        public Machine Machine { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public TimeSpan Time { get; set; }
 
-        private DataBaseContext _dataBaseContext;
-        private int _howManyMachineDatasToSkip;
-        private bool _isMachineDatasLoaded;
-        private bool _isMachineDetailsLoaded;
-        public Machine Machine { get; private set; }
-        public List<MachineDatas> MachineDatas { get; private set; }
-        public MachineDetails MachineDetails { get; private set; }
-        public Command NextPaginationMachineDetailCommand { get; private set; }
-        public Command PreviousPaginationMachineDetailCommand { get; private set; }
-        public Command RefreshCommand { get; private set;  }
-
-        public MachineDetailsViewModel(DataBaseContext dataBaseContext, Machine machine)
+        public MachineDetailsViewModel(APIConnectionManager 
+            APIConnectionManager, Machine machine)
         {
-            this._dataBaseContext = dataBaseContext;
-            this._isMachineDatasLoaded = false;
-            this._isMachineDetailsLoaded = false;
-            this.Machine = machine;
-            this.MachineDatas = new List<MachineDatas>();
-            this.MachineDetails = new MachineDetails();
-            this.CreateCommands();
+            AggregatedMachineDatas = new List<AggregatedMachineDatas>();
+            _APIConnectionManager = APIConnectionManager;
+            IsAggregatedMachineDatasLoaded = true;
+            Machine = machine;
+            StartDateTime = DateTime.Now.Date;
+            CreateCommands();
         }
 
         private void CreateCommands()
         {
-            this.RefreshCommand = new Command(() =>
+            GetAggregatedMachineDatasCommand = new Command(async () =>
             {
-                if(!this._isMachineDatasLoaded || !this._isMachineDetailsLoaded)
+                if(!IsAggregatedMachineDatasLoaded)
                 {
                     return;
                 }
-                this._isMachineDatasLoaded = false;
-                this._isMachineDetailsLoaded = false;
-                this._howManyMachineDatasToSkip = 0;
-                this.GetMachineDetailsAsync();
-                this.GetMachineDatasAsync();
-            });
 
-            this.NextPaginationMachineDetailCommand = new Command(() =>
-            {
-                if(!this._isMachineDatasLoaded)
+                IsAggregatedMachineDatasLoaded = false;
+                if(Time.Minutes % 10 != 0)
                 {
-                    return;
+                    Time -= TimeSpan.FromMinutes(Time.Minutes % 10);
                 }
-                this._isMachineDatasLoaded = false;
-                this._howManyMachineDatasToSkip += MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
-                this.GetMachineDatasAsync();
-            });
-
-            this.PreviousPaginationMachineDetailCommand = new Command(() =>
-            {
-                if(this._howManyMachineDatasToSkip == 0)
-                {
-                    return;
-                }
-                else if(!this._isMachineDatasLoaded)
-                {
-                    return;
-                }
-                this._isMachineDatasLoaded = false;
-
-                this._howManyMachineDatasToSkip -= MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
-                this.GetMachineDatasAsync();
+                await GetAggregatedMachineDatas();
+                IsAggregatedMachineDatasLoaded = true;
             });
         }
 
-        public void GetDataOnLoad()
+        private async Task GetAggregatedMachineDatas()
         {
-            this.GetMachineDetailsAsync();
-            this.GetMachineDatasAsync();
-        }
+            List<AggregatedMachineDatas> aggregatedMachineDatas 
+                = new List<AggregatedMachineDatas>();
+            Exception? exception = null;
 
-        private async Task<List<MachineDatas>>GetMachineDatas()
-        {
-            try
+            for(int i = 0; i <= HowManyToTakeForwardMinusOne; ++i)
             {
-                return await this._dataBaseContext.MachineDatas
-                    .Where(x => x.MachineId == this.Machine.Id)
-                    .Skip(this._howManyMachineDatasToSkip)
-                    .Take(MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE)
-                    .ToListAsync();
+                try
+                {
+                    AggregatedMachineDatas? aggregatedMachineData
+                        = await GetAggregatedMachineData(i);
+                    if(aggregatedMachineData != null)
+                    {
+                        aggregatedMachineDatas.Add(aggregatedMachineData);
+                    }
+                }
+                catch(Exception e)
+                {
+                    exception = e;
+                }
             }
-            catch(Exception e)
+
+            LogExceptionToExceptionHandlerForGettingAggregatedMachineDatas(exception);
+            AggregatedMachineDatas = aggregatedMachineDatas;
+        }
+
+        private async Task<AggregatedMachineDatas?> GetAggregatedMachineData
+            (int currentTimeStartNumber)
+        {
+            string jsonString = await _APIConnectionManager.Get
+                ($"/machine/{Machine.Id}/aggregatedDatas/" +
+                $"{StartDateTime.Add(Time).AddMinutes(currentTimeStartNumber * 10)
+                .ToString("dd-MM-yyyy_HH:mm")}");
+
+            if(!jsonString.IsNullOrEmpty())
+            {
+                return JsonSerializer.Deserialize
+                    <AggregatedMachineDatas>(jsonString,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                    ?? null;
+            }
+            return null;
+        }
+
+        private void LogExceptionToExceptionHandlerForGettingAggregatedMachineDatas
+            (Exception? exception)
+        {
+            if(exception is HttpProtocolException e)
             {
                 ExceptionsHandler.LogExceptionToAlertAsync
-                ($"Error occured when tried to get machine datas: {e.Message}");
+                    ($"Http error occured. Status code: {e.ErrorCode}");
             }
-            return new List<MachineDatas>();
-        }
-
-        private async void GetMachineDatasAsync()
-        {
-            List<MachineDatas> machineDatas = await this.GetMachineDatas();
-            if(machineDatas.Count == 0)
-            {
-                this._howManyMachineDatasToSkip = Math.Max(this._howManyMachineDatasToSkip
-                - MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE, 0);
-                machineDatas = await this.GetMachineDatas();
-            }
-            else if(machineDatas.Count < MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE)
-            {
-                this._howManyMachineDatasToSkip -= this._howManyMachineDatasToSkip % MAX_AMOUNT_OF_MACHINE_DETAILS_ON_PAGE;
-            }
-
-            this.MachineDatas = machineDatas;
-            this._isMachineDatasLoaded = true;
-        }
-
-        private async Task <MachineDetails> GetMachineDetails()
-        {
-            try
-            {
-                IQueryable<MachineDatas> machineDatasForCurrentMachine = this._dataBaseContext.MachineDatas
-                    .Where(x => x.MachineId == this.Machine.Id);
-                MachineDetails machineDetails = new MachineDetails()
-                {
-                    AverageTemperature = machineDatasForCurrentMachine.Average(x => x.Temperature),
-                    AverageTimeProcessingRecources = machineDatasForCurrentMachine
-                        .Sum(x => x.SecondsInWhichResourcesWasProcessed),
-                    LastUpdateDateTime = machineDatasForCurrentMachine.Max(x => x.UpdateDataDate),
-                    TotalResourcesProcessed = machineDatasForCurrentMachine
-                        .Sum(x => x.NumberOfProcessedResourcesSinceGettingData)
-                };
-
-                if(machineDetails.TotalResourcesProcessed != 0)
-                {
-                    machineDetails.AverageTimeProcessingRecources /= machineDetails.TotalResourcesProcessed;
-                }
-                return machineDetails;
-            }
-            catch(Exception e)
+            else if(exception != null)
             {
                 ExceptionsHandler.LogExceptionToAlertAsync
-                ($"Error occured when tried to get machine details: {e.Message}");
+                    ($"Error occured when getting aggregated machine datas: " +
+                    $"{exception.Message}");
             }
-
-            return new MachineDetails();
-        }
-
-        private async void GetMachineDetailsAsync()
-        {
-            this.MachineDetails = await this.GetMachineDetails();
-            this._isMachineDetailsLoaded = true;
         }
     }
 }
