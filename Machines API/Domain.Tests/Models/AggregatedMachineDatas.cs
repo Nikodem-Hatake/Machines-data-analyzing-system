@@ -1,4 +1,6 @@
-﻿namespace Domain.Tests.Models
+﻿using Domain.Tests.Validators;
+
+namespace Domain.Tests.Models
 {
     public class AggregatedMachineDatas
     {

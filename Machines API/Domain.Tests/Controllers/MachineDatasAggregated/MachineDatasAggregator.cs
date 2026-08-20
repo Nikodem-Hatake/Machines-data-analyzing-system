@@ -5,8 +5,6 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
 {
     public static class MachineDatasAggregator
     {
-        private const string DATE_TIME_FORMAT_FOR_PARSED_DATE = "dd-MM-yyyy HH:mm";
-
         public static AggregatedMachineDatas? Aggregate(DataBaseContext dataBaseContext,
             int machineId, string startDate)
         {
@@ -39,10 +37,10 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
             (DataBaseContext dataBaseContext, int machineId, string startDate)
         {
             DateTime endDate = DateTime.ParseExact(startDate,
-                DATE_TIME_FORMAT_FOR_PARSED_DATE, null);
-            endDate = endDate.AddMinutes(10);
+                MachinesDatasAggregatedController.DATE_TIME_FORMAT_FOR_PARSED_DATE, null)
+                .AddMinutes(10);
             string endDateString = endDate.ToString
-                (DATE_TIME_FORMAT_FOR_PARSED_DATE);
+                (MachinesDatasAggregatedController.DATE_TIME_FORMAT_FOR_PARSED_DATE);
 
             return dataBaseContext.MachineDatas
                 .Where(x => x.MachineId == machineId 

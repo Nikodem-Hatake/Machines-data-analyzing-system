@@ -1,5 +1,7 @@
 ﻿using Domain.Tests.Models;
+using Domain.Tests.Validators;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Tests.Controllers.MachineDatasAggregated
 {
@@ -7,6 +9,7 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
     public class MachinesDatasAggregatedController : ControllerBase
     {
         public const string DATE_TIME_FORMAT = "dd-MM-yyyy_HH:mm";
+        public const string DATE_TIME_FORMAT_FOR_PARSED_DATE = "dd-MM-yyyy HH:mm";
 
         private DataBaseContext _dataBaseContext;
 
@@ -15,38 +18,61 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
             _dataBaseContext = dataBaseContext;
         }
 
-        [Route("machine/{machineId}/aggregatedDatas/{startDate}")]
-        public IActionResult GetAggregatedMachineDatas()
+        private void AddAggregatedMachineDatasToDataBase
+            (AggregatedMachineDatas aggregatedMachineDatas)
         {
-            if(!MachinesDatasAggregatedControllerValidator
-                .ValidateRouteValues(HttpContext.Request))
+            _dataBaseContext.AggregatedMachineDatas.Add(aggregatedMachineDatas);
+            _dataBaseContext.SaveChanges();
+        }
+
+        [Route("machine/{machineId}/aggregatedDatas/{startDate}/{howManyDatasForward}")]
+        public IActionResult GetAggregatedMachineDatas([Required][FromRoute] 
+            int? machineId, [DateValidatorAttribute][FromRoute] string? startDate,
+            [Required][FromRoute][Range(1, 10)] int? howManyDatasForward)
+        {
+            if(!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            AggregatedMachineDatas? aggregatedMachineDatas;
+            startDate = startDate.Replace('_', ' ');
+            List<AggregatedMachineDatas> aggregatedMachineDatas 
+                = new List<AggregatedMachineDatas>();
+            DateTime dateTime = DateTime.ParseExact
+                (startDate, DATE_TIME_FORMAT_FOR_PARSED_DATE, null);
+
             try
             {
-                aggregatedMachineDatas = GetAggregatedMachineDatasFromDataBase();
+                if(_dataBaseContext.Machine.Count(x => x.Id == machineId) == 0)
+                {
+                    return BadRequest($"Machine with id {machineId} was not found.");
+                }
+
+                for(int i = 0; i < howManyDatasForward; ++i)
+                {
+                    AggregatedMachineDatas? aggregatedMachineData 
+                        = GetAggregatedMachineDatasFromDataBase
+                            (machineId.Value, dateTime.ToString
+                            (DATE_TIME_FORMAT_FOR_PARSED_DATE));
+                    if(aggregatedMachineData != null)
+                    {
+                        aggregatedMachineDatas.Add(aggregatedMachineData);
+                    }
+
+                    dateTime = dateTime.AddMinutes(10);
+                }
             }
             catch(Exception e)
             {
                 return StatusCode(500, e.Message);
             }
 
-            if(aggregatedMachineDatas == null)
-            {
-                return Content("", "text/plain");
-            }
             return new JsonResult(aggregatedMachineDatas);
         }
 
-        private AggregatedMachineDatas? GetAggregatedMachineDatasFromDataBase()
+        private AggregatedMachineDatas? GetAggregatedMachineDatasFromDataBase
+            (int machineId, string startDate)
         {
-            int machineId = int.Parse(HttpContext.Request.RouteValues["machineId"].ToString());
-            string startDate = HttpContext.Request.RouteValues["startDate"]
-                .ToString().Replace('_', ' ');
-
             AggregatedMachineDatas? aggregatedMachineDatas = _dataBaseContext
                 .AggregatedMachineDatas.FirstOrDefault
                 (x => x.StartDate == startDate && x.MachineId == machineId);
@@ -59,8 +85,7 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
                 {
                     return null;
                 }
-                _dataBaseContext.AggregatedMachineDatas.Add(aggregatedMachineDatas);
-                _dataBaseContext.SaveChanges();
+                AddAggregatedMachineDatasToDataBase(aggregatedMachineDatas);
             }
             return aggregatedMachineDatas;
         }

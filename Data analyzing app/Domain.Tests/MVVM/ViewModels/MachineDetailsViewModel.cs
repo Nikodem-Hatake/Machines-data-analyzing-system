@@ -49,63 +49,44 @@ namespace Domain.Tests.MVVM.ViewModels
 
         private async Task GetAggregatedMachineDatas()
         {
-            List<AggregatedMachineDatas> aggregatedMachineDatas 
-                = new List<AggregatedMachineDatas>();
-            Exception? exception = null;
+            List<AggregatedMachineDatas> aggregatedMachineDatas;
 
-            for(int i = 0; i <= HowManyToTakeForwardMinusOne; ++i)
+            try
             {
-                try
-                {
-                    AggregatedMachineDatas? aggregatedMachineData
-                        = await GetAggregatedMachineData(i);
-                    if(aggregatedMachineData != null)
-                    {
-                        aggregatedMachineDatas.Add(aggregatedMachineData);
-                    }
-                }
-                catch(Exception e)
-                {
-                    exception = e;
-                }
+                aggregatedMachineDatas 
+                    = await GetAggregatedMachineDatasFromAPI();
+            }
+            catch(HttpProtocolException e)
+            {
+                ExceptionsHandler.LogHTTPExceptionToAlertAsync(e);
+                return;
+            }
+            catch(Exception e)
+            {
+                ExceptionsHandler.LogExceptionToAlertAsync
+                    ($"Error occured when getting aggregated machine datas: " +
+                    $"{e.Message}");
+                return;
             }
 
-            LogExceptionToExceptionHandlerForGettingAggregatedMachineDatas(exception);
             AggregatedMachineDatas = aggregatedMachineDatas;
         }
 
-        private async Task<AggregatedMachineDatas?> GetAggregatedMachineData
-            (int currentTimeStartNumber)
+        private async Task<List <AggregatedMachineDatas>> GetAggregatedMachineDatasFromAPI()
         {
             string jsonString = await _APIConnectionManager.Get
                 ($"/machine/{Machine.Id}/aggregatedDatas/" +
-                $"{StartDateTime.Add(Time).AddMinutes(currentTimeStartNumber * 10)
-                .ToString("dd-MM-yyyy_HH:mm")}");
+                $"{StartDateTime.Add(Time).ToString("dd-MM-yyyy_HH:mm")}/" +
+                $"{HowManyToTakeForwardMinusOne + 1}");
 
             if(!jsonString.IsNullOrEmpty())
             {
                 return JsonSerializer.Deserialize
-                    <AggregatedMachineDatas>(jsonString,
+                    <List <AggregatedMachineDatas>>(jsonString,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                    ?? null;
+                    ?? new List<AggregatedMachineDatas>();
             }
-            return null;
-        }
-
-        private void LogExceptionToExceptionHandlerForGettingAggregatedMachineDatas
-            (Exception? exception)
-        {
-            if(exception is HttpProtocolException e)
-            {
-                ExceptionsHandler.LogExceptionToAlertAsync
-                    ($"Http error occured. Status code: {e.ErrorCode}");
-            }
-            else if(exception != null)
-            {
-                ExceptionsHandler.LogExceptionToAlertAsync
-                    ($"Error occured when getting aggregated machine datas: " +
-                    $"{exception.Message}");
-            }
+            return new List<AggregatedMachineDatas>();
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace Domain.Tests.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace Domain.Tests.Models
 {
     public class MachineDatas
     {
+        [BindNever]
         public int Id { get; set; }
         public int MachineId { get; set; }
         public int NumberOfProcessedResourcesSinceGettingData { get; set; }

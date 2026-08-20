@@ -7,6 +7,13 @@ namespace Domain.Tests
     public static class ExceptionsHandler
     {
         public static void LogExceptionToAlertAsync(string message)
-            => Shell.Current.DisplayAlertAsync("Błąd", message, "cancel");
+            => Shell.Current.DisplayAlertAsync("Error", message, "cancel");
+
+        public static void LogHTTPExceptionToAlertAsync(HttpProtocolException e)
+        {
+            Shell.Current.DisplayAlertAsync("Error", $"Http error. Status code: " +
+                $"{e.ErrorCode.ToString()}{Environment.NewLine}Message: " +
+                $"{e.Message}", "cancel");
+        }
     }
 }

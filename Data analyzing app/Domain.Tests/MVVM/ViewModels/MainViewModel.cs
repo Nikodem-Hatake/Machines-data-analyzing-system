@@ -42,6 +42,10 @@ namespace Domain.Tests.MVVM.ViewModels
                     Machines = machines;
                 }
             }
+            catch(HttpProtocolException e)
+            {
+                ExceptionsHandler.LogHTTPExceptionToAlertAsync(e);
+            }
             catch(Exception e)
             {
                 ExceptionsHandler.LogExceptionToAlertAsync

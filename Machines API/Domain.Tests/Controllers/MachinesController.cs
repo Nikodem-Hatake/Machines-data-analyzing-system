@@ -1,5 +1,6 @@
 ﻿using Domain.Tests.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Tests.Controllers
 {
@@ -15,18 +16,17 @@ namespace Domain.Tests.Controllers
 
         [HttpGet]
         [Route("machine/{id}")]
-        public IActionResult GetMachine()
+        public IActionResult GetMachine([FromRoute][Required] int? id)
         {
-            int id = 0;
-            if(!int.TryParse(HttpContext.Request.RouteValues["id"]?.ToString(), out id))
+            if(!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            return GetMachine(id);
+            return GetMachineFromDataBase(id.Value);
         }
 
-        private IActionResult GetMachine(int id)
+        private IActionResult GetMachineFromDataBase(int id)
         {
             Machine? machine = null;
             try
