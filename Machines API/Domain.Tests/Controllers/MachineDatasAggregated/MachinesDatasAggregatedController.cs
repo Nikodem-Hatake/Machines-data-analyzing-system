@@ -35,6 +35,8 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
                 return BadRequest(ModelState);
             }
 
+            int howManyAggregatedDatasToTake = CalculateHowManyDatasForward
+                (startDate, howManyDatasForward.Value);
             startDate = startDate.Replace('_', ' ');
             List<AggregatedMachineDatas> aggregatedMachineDatas 
                 = new List<AggregatedMachineDatas>();
@@ -48,7 +50,7 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
                     return BadRequest($"Machine with id {machineId} was not found.");
                 }
 
-                for(int i = 0; i < howManyDatasForward; ++i)
+                for(int i = 0; i < howManyAggregatedDatasToTake; ++i)
                 {
                     AggregatedMachineDatas? aggregatedMachineData 
                         = GetAggregatedMachineDatasFromDataBase
@@ -88,6 +90,20 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
                 AddAggregatedMachineDatasToDataBase(aggregatedMachineDatas);
             }
             return aggregatedMachineDatas;
+        }
+
+        private int CalculateHowManyDatasForward
+            (string startDate, int howManyDatasForward)
+        {
+            DateTime dateTime = DateTime.ParseExact
+                (startDate, DATE_TIME_FORMAT, null);
+
+            if(dateTime.AddMinutes(10 * howManyDatasForward) < DateTime.Now)
+            {
+                return howManyDatasForward;
+            }
+            return howManyDatasForward - (int)(dateTime.AddMinutes
+                (10 * (howManyDatasForward + 1)) - DateTime.Now).TotalMinutes / 10;
         }
     }
 }

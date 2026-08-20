@@ -1,0 +1,112 @@
+﻿body 
+{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    margin: 0;
+    min-height: 100vh;
+}
+
+h2 
+{
+    text-align: center;
+}
+
+header, footer 
+{
+    background-color: #003468;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+}
+
+label 
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 1%;
+}
+
+table 
+{
+    border-collapse: collapse;
+    min-width: 30%;
+}
+
+tbody > tr:nth-child(odd) 
+{
+    background-color: #DDDDDD;
+}
+
+td, th 
+{
+    border: 1px solid #111111;
+    text-align: center;
+}
+
+thead
+{
+    background-color: #003468;
+    color: #FFFFFF;
+}
+
+.backToMachinesForm
+{
+    position: absolute;
+    right: 1%;
+    top: 1%;
+}
+
+.flexCenterWrapper 
+{
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.machineDetailsButton 
+{
+    background-color: #77ABDF;
+    border: 1px solid #111111;
+    color: #003468;
+    display: block;
+    margin: auto;
+    transition: 0.3s all ease-in-out;
+}
+
+.machineDetailsButton:hover 
+{
+    background-color: #99CDFF;
+}
+
+.machineDetailsMain 
+{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.machineDiv
+{
+    align-items: center;
+    background-color: #003468;
+    border: 1px solid #BBBBBB;
+    border-radius: 15px;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1%;
+    padding: 1%;
+}
+
+.m1
+{
+    margin: 1%;
+}
+
+.w20
+{
+    width: 20%;
+}

@@ -1,11 +1,13 @@
 services:
-  DataBaseDataSaverService:
-    image: ${DOCKER_REGISTRY-}databasesaverservice
+  MachinesAPI:
+    image: ${DOCKER_REGISTRY-}machinesapi
     build:
       context: .
-      dockerfile: "DataBase data saver service/Domain.Tests/Dockerfile"
+      dockerfile: "Machines API/Domain.Tests/Dockerfile"
     networks:
       - machines_data_analyzing_network
+    ports:
+      - 6969:8080
     stdin_open: true
     tty: true
 
@@ -19,15 +21,27 @@ services:
     stdin_open: true
     tty: true
 
-  MachinesAPI:
-    image: ${DOCKER_REGISTRY-}machinesapi
+  DataBaseDataSaverService:
+    image: ${DOCKER_REGISTRY-}databasesaverservice
     build:
       context: .
-      dockerfile: "Machines API/Domain.Tests/Dockerfile"
+      dockerfile: "DataBase data saver service/Domain.Tests/Dockerfile"
+    networks:
+      - machines_data_analyzing_network
+    stdin_open: true
+    tty: true
+
+  DataAnalyzingWebApp:
+    image: ${DOCKER_REGISTRY-}dataanalyzingwebapp
+    build:
+      context: .
+      dockerfile: "Data analyzing web app/Domain.Tests/Dockerfile"
     networks:
       - machines_data_analyzing_network
     ports:
-      - 6969:8080
+      - 6970:8080
+    environment:
+      APIHostName: "MachinesAPI:8080"
     stdin_open: true
     tty: true
 

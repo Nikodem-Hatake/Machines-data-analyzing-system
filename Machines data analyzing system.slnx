@@ -8,6 +8,11 @@
     </Project>
     <Project Path="Data analyzing app/Tests/Tests.csproj" />
   </Folder>
+  <Folder Name="/Data analyzing web app/">
+    <Project Path="Data analyzing web app/Domain.Tests/Domain.Tests.csproj" Id="a07cab71-e926-4ef2-a5cf-e19ee9c5fd68" />
+    <Project Path="Data analyzing web app/Domain/Domain.csproj" Id="6835472f-3ac2-4778-8c73-da2609dabea9" />
+    <Project Path="Data analyzing web app/Tests/Tests.csproj" Id="599f14d8-fed5-4b4b-ae3e-5fec51f7a5c7" />
+  </Folder>
   <Folder Name="/DataBase data saver service/">
     <Project Path="DataBase data saver service/Domain.Tests/Domain.Tests.csproj" />
     <Project Path="DataBase data saver service/Domain/Domain.csproj" />

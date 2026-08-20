@@ -1,27 +1,21 @@
-﻿using Domain.Tests.Controllers.MachineDatasAggregated;
+﻿using Domain.Tests.ViewModels.MachineDetails;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Tests.Validators
 {
     public class DateValidatorAttribute : ValidationAttribute
     {
-        public int HowManyDatasForwardAttribute { get; set; }
-
         protected override ValidationResult? IsValid(object? value, 
             ValidationContext validationContext)
         {
             DateTime dateTime;
-            if(!DateTime.TryParseExact(value?.ToString(), 
-                MachinesDatasAggregatedController.DATE_TIME_FORMAT, null, 
+            if(!DateTime.TryParseExact(value?.ToString(),
+                MachineDetailsViewModel.DATE_TIME_FORMAT_FOR_RECIEVED_DATA, null, 
                 System.Globalization.DateTimeStyles.None, out dateTime))
             {
                 return new ValidationResult("Date is not in valid format.");
             }
-            else if(dateTime.Minute % 10 != 0)
-            {
-                return new ValidationResult("Minutes must result 0 when modulo by 10.");
-            }
-            else if(dateTime.AddMinutes(10) > DateTime.Now)
+            else if(dateTime > DateTime.Now.AddMinutes(10))
             {
                 return new ValidationResult("Can't aggregate right now.");
             }
