@@ -1,38 +1,9 @@
-﻿@model HomeViewModel
-<!DOCTYPE html>
-<html>
-    <head>
-        <link href="~/style.css" rel="stylesheet" type="text/css"/>
-        <meta charset="utf-8"/>
-        <title>Machines</title>
-    </head>
-    <body>
-        <header>
-            <h1>Machines</h1>
-        </header>
-        <main class="flexCenterWrapper">
-            @{
-                List<Machine>? machines = await Model.GetMachinesAsync();
-                if(machines == null)
-                {
-                    <h2>No machines to display</h2>
-                }
-                else
-                {
-                    foreach(Machine machine in machines)
-                    {
-                        <div class="machineDiv w20">
-                            <h2>@machine.Name</h2>
-                            <form action="/MachineDetails/@machine.Id" method="get">
-                                <button class="machineDetailsButton">See details</button>
-                            </form>
-                        </div>
-                    }
-                }
-            }
-        </main>
-        <footer>
-            <h2>Machines data analyzing system @@@DateTime.Now.Year</h2>
-        </footer>
-    </body>
-</html>
+﻿@{
+    ViewBag.Title = "Machines";
+}
+<button class="topRightButton" id="RefreshButton" type="button">Refresh</button>
+<main class="flexCenterWrapper" id="Machines"></main>
+@section script
+{
+    <script src="~/Scripts/IndexViewScript.js"></script>
+}

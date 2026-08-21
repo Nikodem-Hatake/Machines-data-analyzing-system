@@ -14,18 +14,26 @@ namespace Domain.Tests.Controllers
             return View(new MachineDetailsViewModel(machineId ?? 0));
         }
 
-        [HttpPost]
-        [Route("machineDetails/{machineId}")]
+        [Route("getAggregatedMachineDatas/{machineId}/{startDate}/{howManyDatesForward}")]
         public IActionResult MachineDetails([Required][FromRoute] int? machineId,
-            [Required][FromForm][DateValidatorAttribute] string? startDate, 
-            [Required][FromForm] int? howManyDatesForward)
+            [Required][FromRoute][DateValidatorAttribute] string? startDate, 
+            [Required][FromRoute] int? howManyDatesForward)
         {
             if(ModelState.IsValid)
             {
-                return View(new MachineDetailsViewModel(machineId.Value,
+                return PartialView("_AggregatedMachineDatasPartialView", 
+                    new MachineDetailsViewModel(machineId.Value,
                     startDate, howManyDatesForward.Value));
             }
-            return View(new MachineDetailsViewModel(machineId ?? 0));
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet]
+        [Route("getMachineDetails/{machineId}")]
+        public PartialViewResult GetMachineDetails([Required][FromRoute] int? machineId)
+        {
+            return PartialView("_MachineDetailsPartialView", new
+                MachineDetailsViewModel(machineId ?? 0));
         }
     }
 }

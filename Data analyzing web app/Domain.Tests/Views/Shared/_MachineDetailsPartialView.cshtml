@@ -1,0 +1,26 @@
+﻿@model MachineDetailsViewModel
+@{
+    Machine? machine = await Model.GetMachineAsync();
+    if(machine == null)
+    {
+        <h2>Couldn't get machine details</h2>
+    }
+    else
+    {
+        <div class="machineDiv">
+            <h2>@machine.Name</h2>
+            <section>
+                <span hidden="hidden" id="MachineID">@machine.Id</span>
+                <label for="StartDateInput">
+                    Start date:
+                    <input type="datetime-local" name="startDate" id="StartDateInput"/>
+                </label>
+                <label for="HowManyDatesForward">
+                    How many aggregated datas forward?:
+                    <input type="number" step="1" min="1" max="10" name="HowManyDatesForward" id="HowManyDatesForward"/>
+                </label>
+                <button class="machineDetailsButton" id="GetAggregateMachineDatasButton" type="button">See aggregated datas</button>
+            </section>
+        </div>
+    }
+}

@@ -1,0 +1,20 @@
+﻿@model HomeViewModel
+@{
+    List<Machine>? machines = await Model.GetMachinesAsync();
+    if(machines == null)
+    {
+        <h2>No machines to display</h2>
+    }
+    else
+    {
+        foreach(Machine machine in machines)
+        {
+            <div class="machineDiv w20">
+                <h2>@machine.Name</h2>
+                <form action="/MachineDetails/@machine.Id" method="get">
+                    <button class="machineDetailsButton">See details</button>
+                </form>
+            </div>
+        }
+    }
+}

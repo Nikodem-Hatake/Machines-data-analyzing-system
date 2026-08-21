@@ -1,0 +1,16 @@
+﻿@model MachineDetailsViewModel
+@if(Model.IsFormSendedCorrectly)
+{
+    foreach(AggregatedMachineDatas aggregatedMachineData
+        in await Model.GetAggregatedMachineDatasAsync())
+    {
+        <tr>
+            <td>@aggregatedMachineData.StartDate</td>
+            <td>@aggregatedMachineData.AverageSecondsInWhichResourceIsProcessed.ToString("N2")</td>
+            <td>@aggregatedMachineData.MinimumTemperature.ToString("N2")</td>
+            <td>@aggregatedMachineData.MaximumTemperature.ToString("N2")</td>
+            <td>@aggregatedMachineData.AverageTemperature.ToString("N2")</td>
+            <td>@aggregatedMachineData.TotalNumberOfProcessedResources</td>
+        </tr>
+    }
+}

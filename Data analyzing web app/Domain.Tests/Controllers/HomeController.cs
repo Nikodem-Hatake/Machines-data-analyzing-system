@@ -11,5 +11,12 @@ namespace Domain.Tests.Controllers
         {
             return View(new HomeViewModel());
         }
+
+        [HttpGet]
+        [Route("getMachines")]
+        public PartialViewResult GetMachines()
+        {
+            return PartialView("_MachinesPartialView", new HomeViewModel());
+        }
     }
 }
