@@ -13,7 +13,8 @@ namespace Domain.Tests
 
             if(queueDataAdder.IsConstructedCorrectly)
             {
-                App app = new App(new SimulatedMachinesDataCollector(), queueDataAdder);
+                App<SimulatedMachinesDataCollector> app = new App<SimulatedMachinesDataCollector>
+                        (new SimulatedMachinesDataCollector(), queueDataAdder);
                 app.Run();
             }
         }

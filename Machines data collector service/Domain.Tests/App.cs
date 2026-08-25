@@ -1,11 +1,11 @@
 ﻿namespace Domain.Tests
 {
-    public class App
+    public class App <T> where T : IMachineDataCollector
     {
-        private IMachineDataCollector _machineDataCollector;
+        private T _machineDataCollector;
         private QueueDataAdder _queueDataAdder;
 
-        public App(IMachineDataCollector machineDataCollector, QueueDataAdder queueDataAdder)
+        public App(T machineDataCollector, QueueDataAdder queueDataAdder)
         {
             _machineDataCollector = machineDataCollector;
             _queueDataAdder = queueDataAdder;
