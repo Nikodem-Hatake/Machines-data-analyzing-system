@@ -22,7 +22,7 @@ namespace Domain.Tests.Controllers
         [HttpPost]
         [Route("machineDatas")]
         public IActionResult AddMachineData([FromBody][Required] 
-            MachineDatas? machineDatas)
+            MachineDatas machineDatas)
         {
             if(!ModelState.IsValid)
             {
