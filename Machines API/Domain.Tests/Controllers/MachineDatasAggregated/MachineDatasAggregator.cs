@@ -1,11 +1,12 @@
-﻿using Domain.Tests.Models;
+﻿using Domain.Tests.DBContexts;
+using Domain.Tests.Models;
 using System.Reflection.PortableExecutable;
 
 namespace Domain.Tests.Controllers.MachineDatasAggregated
 {
     public static class MachineDatasAggregator
     {
-        public static AggregatedMachineDatas? Aggregate(DataBaseContext dataBaseContext,
+        public static AggregatedMachineDatas? Aggregate(MachinesDatasDBContext dataBaseContext,
             int machineId, string startDate)
         {
             IQueryable<MachineDatas> machineDatas = GetMachineDatasFromDataBase
@@ -34,7 +35,7 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
         }
 
         private static IQueryable<MachineDatas> GetMachineDatasFromDataBase
-            (DataBaseContext dataBaseContext, int machineId, string startDate)
+            (MachinesDatasDBContext dataBaseContext, int machineId, string startDate)
         {
             DateTime endDate = DateTime.ParseExact(startDate,
                 MachinesDatasAggregatedController.DATE_TIME_FORMAT_FOR_PARSED_DATE, null)
@@ -42,10 +43,7 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
             string endDateString = endDate.ToString
                 (MachinesDatasAggregatedController.DATE_TIME_FORMAT_FOR_PARSED_DATE);
 
-            return dataBaseContext.MachineDatas
-                .Where(x => x.MachineId == machineId 
-                && x.UpdateDataDate.CompareTo(startDate) > -1
-                && x.UpdateDataDate.CompareTo(endDateString) < 0);
+            return dataBaseContext.GetMachineDatas(machineId, startDate, endDateString);
         }
     }
 }

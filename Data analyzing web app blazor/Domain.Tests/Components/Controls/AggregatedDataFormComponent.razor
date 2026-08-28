@@ -1,0 +1,30 @@
+﻿@inject IDialogService dialogService
+
+<MudCard>
+    <MudCardContent>
+        <MudForm
+            @ref="_form"
+            Model="@_aggregatedMachineDatasSelector"
+        >
+            <MudDatePicker 
+                @bind-Date="_aggregatedMachineDatasSelector.StartDate"
+                Label="Start date"
+            />
+            <MudTimePicker 
+                @bind-Time="_aggregatedMachineDatasSelector.Time"
+                HelperText="Minutes should end with 0."
+                Label="Time"
+            />
+            <MudNumericField 
+                @bind-Value="_aggregatedMachineDatasSelector.HowManyDatesForward"
+                For="@(() => _aggregatedMachineDatasSelector.HowManyDatesForward)"
+                Label="How many dates forward"
+                HelperText="Number should be in range from 1 to 10." 
+            />
+            <MudButton />
+        </MudForm>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton class="ml-auto" Variant="Variant.Filled" OnClick="@(async () => await Submit())">Get data</MudButton>
+    </MudCardActions>
+</MudCard>

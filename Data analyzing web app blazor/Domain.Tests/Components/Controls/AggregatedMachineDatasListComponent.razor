@@ -1,0 +1,24 @@
+﻿<MudTable 
+    Breakpoint="Breakpoint.None"
+    Items="AggregatedMachineDatas"
+    Loading="IsLoading"
+    style="height:100%"
+>
+    <HeaderContent>
+        <MudTh>Start <MudIcon Icon="@Icons.Material.Filled.DateRange" Size="Size.Small"/></MudTh>
+        <MudTh>Avg <MudIcon Icon="@Icons.Material.Filled.AccessTime" Size="Size.Small" /> for one <MudIcon Icon="@Icons.Material.Filled.Square" Size="Size.Small"/></MudTh>
+        <MudTh>Min <MudIcon Icon="@Icons.Material.Filled.DeviceThermostat" Size="Size.Small"/></MudTh>
+        <MudTh>Max <MudIcon Icon="@Icons.Material.Filled.DeviceThermostat" Size="Size.Small"/></MudTh>
+        <MudTh>Avg <MudIcon Icon="@Icons.Material.Filled.DeviceThermostat" Size="Size.Small"/></MudTh>
+        <MudTh>Sum <MudIcon Icon="@Icons.Material.Filled.Square" Size="Size.Small"/></MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd>@context.StartDate</MudTd>
+        <MudTd>@context.AverageSecondsInWhichResourceIsProcessed.ToString("N2")</MudTd>
+        <MudTd>@context.MinimumTemperature.ToString("N2")</MudTd>
+        <MudTd>@context.MaximumTemperature.ToString("N2")</MudTd>
+        <MudTd>@context.AverageSecondsInWhichResourceIsProcessed.ToString("N2")</MudTd>
+        <MudTd>@context.TotalNumberOfProcessedResources</MudTd>
+    </RowTemplate>
+</MudTable>

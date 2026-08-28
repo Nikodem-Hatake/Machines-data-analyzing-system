@@ -8,6 +8,7 @@
     <DockerfileContext>..\..</DockerfileContext>
 	<DockerfileTag>machinesapi</DockerfileTag>
 	<DockerfileRunArguments>--network machines_data_analyzing_network --name MachinesAPI -it</DockerfileRunArguments>
+	<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

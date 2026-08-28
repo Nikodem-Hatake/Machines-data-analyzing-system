@@ -1,4 +1,5 @@
-﻿using Domain.Tests.Models;
+﻿using Domain.Tests.DBContexts;
+using Domain.Tests.Models;
 using Domain.Tests.Validators;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -11,23 +12,21 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
         public const string DATE_TIME_FORMAT = "dd-MM-yyyy_HH:mm";
         public const string DATE_TIME_FORMAT_FOR_PARSED_DATE = "dd-MM-yyyy HH:mm";
 
-        private DataBaseContext _dataBaseContext;
+        private AggregatedMachinesDatasDBContext _aggregatedMachineDatasDBContext;
+        private MachinesDatasDBContext _machinesDatasDBContext;
+        private MachinesDBContext _machinesDBContext;
 
-        public MachinesDatasAggregatedController(DataBaseContext dataBaseContext)
+        public MachinesDatasAggregatedController(AggregatedMachinesDatasDBContext aggregatedMachinesDatasDBContext,
+            MachinesDBContext machinesDBContext, MachinesDatasDBContext machinesDatasDBContext)
         {
-            _dataBaseContext = dataBaseContext;
-        }
-
-        private void AddAggregatedMachineDatasToDataBase
-            (AggregatedMachineDatas aggregatedMachineDatas)
-        {
-            _dataBaseContext.AggregatedMachineDatas.Add(aggregatedMachineDatas);
-            _dataBaseContext.SaveChanges();
+            _aggregatedMachineDatasDBContext = aggregatedMachinesDatasDBContext;
+            _machinesDBContext = machinesDBContext;
+            _machinesDatasDBContext = machinesDatasDBContext;
         }
 
         [Route("machine/{machineId}/aggregatedDatas/{startDate}/{howManyDatasForward}")]
-        public IActionResult GetAggregatedMachineDatas([Required][FromRoute] 
-            int? machineId, [DateValidatorAttribute][FromRoute] string? startDate,
+        public async Task <IActionResult> GetAggregatedMachineDatas([Required][FromRoute] 
+            int? machineId, [DateValidatorAttribute][FromRoute] string startDate,
             [Required][FromRoute][Range(1, 10)] int? howManyDatasForward)
         {
             if(!ModelState.IsValid)
@@ -35,30 +34,27 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
                 return BadRequest(ModelState);
             }
 
-            int howManyAggregatedDatasToTake = CalculateHowManyDatasForward
-                (startDate, howManyDatasForward.Value);
+            int howManyAggregatedDatasToTake = CalculateHowManyDatasForward(startDate, howManyDatasForward.Value);
             startDate = startDate.Replace('_', ' ');
-            List<AggregatedMachineDatas> aggregatedMachineDatas 
-                = new List<AggregatedMachineDatas>();
-            DateTime dateTime = DateTime.ParseExact
-                (startDate, DATE_TIME_FORMAT_FOR_PARSED_DATE, null);
+            List<AggregatedMachineDatas> aggregatedMachineDatas = new();
+            DateTime dateTime = DateTime.ParseExact(startDate, DATE_TIME_FORMAT_FOR_PARSED_DATE, null);
 
             try
             {
-                if(_dataBaseContext.Machine.Count(x => x.Id == machineId) == 0)
+                if(!await _machinesDBContext.ContainsMachine(machineId.Value))
                 {
                     return BadRequest($"Machine with id {machineId} was not found.");
                 }
 
                 for(int i = 0; i < howManyAggregatedDatasToTake; ++i)
                 {
-                    AggregatedMachineDatas? aggregatedMachineData 
-                        = GetAggregatedMachineDatasFromDataBase
-                            (machineId.Value, dateTime.ToString
-                            (DATE_TIME_FORMAT_FOR_PARSED_DATE));
-                    if(aggregatedMachineData != null)
+                    AggregatedMachineDatas aggregatedMachineDataJsonString
+                        = await _aggregatedMachineDatasDBContext.GetAggregatedMachineData
+                            (_machinesDatasDBContext, dateTime.ToString(DATE_TIME_FORMAT_FOR_PARSED_DATE),
+                            machineId.Value);
+                    if(aggregatedMachineDataJsonString != null)
                     {
-                        aggregatedMachineDatas.Add(aggregatedMachineData);
+                        aggregatedMachineDatas.Add(aggregatedMachineDataJsonString);
                     }
 
                     dateTime = dateTime.AddMinutes(10);
@@ -70,26 +66,6 @@ namespace Domain.Tests.Controllers.MachineDatasAggregated
             }
 
             return new JsonResult(aggregatedMachineDatas);
-        }
-
-        private AggregatedMachineDatas? GetAggregatedMachineDatasFromDataBase
-            (int machineId, string startDate)
-        {
-            AggregatedMachineDatas? aggregatedMachineDatas = _dataBaseContext
-                .AggregatedMachineDatas.FirstOrDefault
-                (x => x.StartDate == startDate && x.MachineId == machineId);
-
-            if(aggregatedMachineDatas == null)
-            {
-                aggregatedMachineDatas = MachineDatasAggregator.Aggregate
-                    (_dataBaseContext, machineId, startDate);
-                if(aggregatedMachineDatas == null)
-                {
-                    return null;
-                }
-                AddAggregatedMachineDatasToDataBase(aggregatedMachineDatas);
-            }
-            return aggregatedMachineDatas;
         }
 
         private int CalculateHowManyDatasForward

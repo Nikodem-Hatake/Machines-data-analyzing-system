@@ -1,0 +1,23 @@
+﻿@page "/details/{Id:int}"
+@inject NavigationManager navigationManager
+
+<MudGrid Spacing="2">
+    <MudItem
+        xs="12"
+        lg="7"
+    >
+        <AggregatedDataFormComponent 
+            MachineId="@Id.Value"
+            OnSuccessfullFormSubmitEventCallback="OnSuccessfullFormSubmit"
+        />
+    </MudItem>
+    <MudItem
+        xs="12"
+        lg="5"
+    >
+        <AggregatedMachineDatasListComponent 
+            AggregatedMachineDatas="@_aggregatedMachineDatas"
+            IsLoading="@_isLoading"
+        />
+    </MudItem>
+</MudGrid>

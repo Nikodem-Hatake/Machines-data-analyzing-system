@@ -5,7 +5,7 @@
 namespace Domain.Tests.Migrations
 {
     /// <inheritdoc />
-    public partial class Machine : Migration
+    public partial class migraions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace Domain.Tests.Migrations
                     MachineId = table.Column<int>(type: "int", nullable: false),
                     MaximumTemperature = table.Column<double>(type: "float", nullable: false),
                     MinimumTemperature = table.Column<double>(type: "float", nullable: false),
-                    StartDate = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    StartDate = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     TotalNumberOfProcessedResources = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -35,7 +35,7 @@ namespace Domain.Tests.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,7 +52,7 @@ namespace Domain.Tests.Migrations
                     NumberOfProcessedResourcesSinceGettingData = table.Column<int>(type: "int", nullable: false),
                     SecondsInWhichResourcesWasProcessed = table.Column<float>(type: "real", nullable: false),
                     Temperature = table.Column<float>(type: "real", nullable: false),
-                    UpdateDataDate = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
+                    UpdateDataDate = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true)
                 },
                 constraints: table =>
                 {

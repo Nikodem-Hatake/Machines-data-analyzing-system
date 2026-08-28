@@ -1,4 +1,5 @@
-﻿using Domain.Tests.Models;
+﻿using Domain.Tests.DBContexts;
+using Domain.Tests.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,9 +13,9 @@ namespace Domain.Tests.Controllers
     [ApiController]
     public class MachineDatasController : ControllerBase
     {
-        private DataBaseContext _dataBaseContext;
+        private MachinesDatasDBContext _dataBaseContext;
 
-        public MachineDatasController(DataBaseContext dataBaseContext)
+        public MachineDatasController(MachinesDatasDBContext dataBaseContext)
         {
             _dataBaseContext = dataBaseContext;
         }
@@ -31,7 +32,7 @@ namespace Domain.Tests.Controllers
 
             try
             {
-                AddMachineDataToDataBase(machineDatas);
+                _dataBaseContext.Add(machineDatas);
             }
             catch(Exception e)
             {
@@ -39,12 +40,6 @@ namespace Domain.Tests.Controllers
             }
 
             return StatusCode(201);
-        }
-
-        private void AddMachineDataToDataBase(MachineDatas machineData)
-        {
-            _dataBaseContext.MachineDatas.Add(machineData);
-            _dataBaseContext.SaveChanges();
         }
     }
 }

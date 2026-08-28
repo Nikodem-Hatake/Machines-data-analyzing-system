@@ -1,0 +1,21 @@
+﻿@attribute [StreamRendering]
+
+@if(_machines == null)
+{
+    <MudText Align="Align.Center" Typo="Typo.h2">Loading machines...</MudText>
+}
+else if(_machines.Count == 0)
+{
+    <MudText Align="Align.Center" Typo="Typo.h2">No machines available, try again later.</MudText>
+}
+else
+{
+    <MudGrid Spacing="5">
+        <Virtualize
+            Context="machine"
+            Items="_machines"
+        >
+            <MachineComponent Machine="machine"/>
+        </Virtualize>
+    </MudGrid>
+}

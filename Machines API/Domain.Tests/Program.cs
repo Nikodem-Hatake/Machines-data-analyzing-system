@@ -1,3 +1,4 @@
+using Domain.Tests.DBContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Tests
@@ -8,11 +9,20 @@ namespace Domain.Tests
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<DataBaseContext>((serviceProvider, optionsBuilder) =>
+            builder.Services.AddStackExchangeRedisCache(options =>
             {
-                optionsBuilder.UseSqlServer(builder.Configuration
-                    .GetConnectionString("DataBaseConnectionString"));
+                options.Configuration = builder.Configuration
+                    .GetConnectionString("CacheServerHost");
             });
+
+            string dataBaseConnectionString = builder.Configuration.GetConnectionString("DataBaseConnectionString");
+            builder.Services.AddDbContext<MachinesDBContext>((serviceProvider, optionsBuilder) =>
+                optionsBuilder.UseSqlServer(dataBaseConnectionString));
+            builder.Services.AddDbContext<MachinesDatasDBContext>((serviceProvider, optionsBuilder) =>
+                optionsBuilder.UseSqlServer(dataBaseConnectionString));
+            builder.Services.AddDbContext<AggregatedMachinesDatasDBContext>((serviceProvider, optionsBuilder) =>
+                optionsBuilder.UseSqlServer(dataBaseConnectionString));
+            
             builder.Services.AddControllers();
 
             var app = builder.Build();

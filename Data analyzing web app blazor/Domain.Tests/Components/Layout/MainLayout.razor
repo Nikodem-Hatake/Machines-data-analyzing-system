@@ -1,0 +1,27 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider 
+    @bind-IsDarkMode="_isDarkMode"
+    Theme="_theme"    
+/>
+<MudPopoverProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar>
+        <MudLink Color="Color.Tertiary" Href="/" Typo="Typo.h4" Underline="Underline.None">Machines data analyzing</MudLink>
+        <MudSpacer/>
+        <MudSwitch 
+            @bind-Value="_isDarkMode"
+            Size="Size.Large"
+            ThumbIcon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+            ThumbIconColor="Color.Secondary"
+        />
+    </MudAppBar>
+    <MudMainContent class="mt-8">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
