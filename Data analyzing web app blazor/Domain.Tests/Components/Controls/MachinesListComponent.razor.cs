@@ -6,14 +6,13 @@ namespace Domain.Tests.Components.Controls
     {
         private List<Machine> _machines;
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnInitializedAsync()
         {
-            if(firstRender)
+            if(RendererInfo.IsInteractive)
             {
                 _machines = await APIConnectionManager.Get<List<Machine>>("machines") ?? new();
-                StateHasChanged();
             }
-            await base.OnAfterRenderAsync(firstRender);
+            await base.OnInitializedAsync();
         }
     }
 }

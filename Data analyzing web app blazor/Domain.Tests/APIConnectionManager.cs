@@ -20,7 +20,7 @@ namespace Domain.Tests
                         });
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return null;
             }
