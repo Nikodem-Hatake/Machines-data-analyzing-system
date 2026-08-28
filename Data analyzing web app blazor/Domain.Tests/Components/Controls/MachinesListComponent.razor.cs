@@ -6,9 +6,10 @@ namespace Domain.Tests.Components.Controls
     {
         private List<Machine> _machines;
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             _machines = await APIConnectionManager.Get<List<Machine>>("machines") ?? new();
+            await base.OnAfterRenderAsync(firstRender);
         }
     }
 }
