@@ -29,7 +29,7 @@ namespace Domain.Tests.Components.Controls
                 return;
             }
 
-            OnSuccessfullFormSubmitEventCallback.InvokeAsync($"machine/{MachineId}/aggregatedDatas/"
+            await OnSuccessfullFormSubmitEventCallback.InvokeAsync($"machine/{MachineId}/aggregatedDatas/"
                 + $"{_aggregatedMachineDatasSelector.StartDate.Value.Add(_aggregatedMachineDatasSelector.Time.Value)
                 .ToString("dd-MM-yyyy_HH:mm")}/{_aggregatedMachineDatasSelector.HowManyDatesForward}");
         }
