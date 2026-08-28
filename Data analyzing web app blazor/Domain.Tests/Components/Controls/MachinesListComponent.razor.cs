@@ -8,7 +8,11 @@ namespace Domain.Tests.Components.Controls
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            _machines = await APIConnectionManager.Get<List<Machine>>("machines") ?? new();
+            if(firstRender)
+            {
+                _machines = await APIConnectionManager.Get<List<Machine>>("machines") ?? new();
+                StateHasChanged();
+            }
             await base.OnAfterRenderAsync(firstRender);
         }
     }
