@@ -24,6 +24,7 @@ namespace Domain.Tests.Components.Pages
 
         private async void OnSuccessfullFormSubmit(string endpoint)
         {
+            _aggregatedMachineDatas.Clear();
             _isLoading = true;
             _aggregatedMachineDatas = await APIConnectionManager.Get<List<AggregatedMachineDatas>>(endpoint) ?? new();
             _isLoading = false;
