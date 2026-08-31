@@ -10,7 +10,7 @@ namespace Domain.Tests
             var builder = WebApplication.CreateBuilder(args);
 
             APIConnectionManager.APIUrl = "http://" + builder
-                .Configuration.GetConnectionString("MachinesAPIHost") + '/';
+                .Configuration.GetConnectionString("APIHostName") + '/';
 
             // Add services to the container.
             builder.Services.AddMudServices();
@@ -23,13 +23,9 @@ namespace Domain.Tests
             if(!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
             }
 
             app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-            app.UseHttpsRedirection();
-
             app.UseAntiforgery();
 
             app.MapStaticAssets();
